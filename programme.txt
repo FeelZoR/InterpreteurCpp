@@ -9,5 +9,14 @@ jusqua (i>9)
   si (i>14)
     j=1;
   finsi
+
+  pour (d = 0 ; d < 10 ; d = d + 1)
+    j = j + 1;
+  finpour
+
+  tantque (i>5)
+    i=i-1;
+  fintantque
+
 finproc
 # Commentaire Final

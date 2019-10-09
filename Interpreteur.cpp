@@ -56,7 +56,7 @@ Noeud* Interpreteur::seqInst() {
   NoeudSeqInst* sequence = new NoeudSeqInst();
   do {
     sequence->ajoute(inst());
-  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "repeter");
+  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter");
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -71,9 +71,14 @@ Noeud* Interpreteur::inst() {
   }
   else if (m_lecteur.getSymbole() == "si")
     return instSi();
+  else if (m_lecteur.getSymbole() == "pour")
+    return instPour();
+  else if (m_lecteur.getSymbole() == "tantque") {
+      return instTantQue();
+  }
   // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
   else if(m_lecteur.getSymbole() == "repeter"){
-      return instrepeter();  
+      return interpreter();  
   }
   else {
       erreur("Instruction incorrecte");
@@ -144,6 +149,7 @@ Noeud* Interpreteur::instSi() {
 }
 
 
+
 Noeud* Interpreteur::interpreter() { 
     // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
     testerEtAvancer("repeter");
@@ -154,3 +160,41 @@ Noeud* Interpreteur::interpreter() {
     testerEtAvancer(")");
    return new NoeudInstRepeter(sequence,condition);
 }   
+
+Noeud* Interpreteur::instPour() {
+    // <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
+    testerEtAvancer("pour");
+    testerEtAvancer("(");
+
+    Noeud* init = nullptr;
+    if (m_lecteur.getSymbole() == "<VARIABLE>") {
+        init = affectation();
+    }
+
+    testerEtAvancer(";");
+    Noeud* condition = expression();
+    testerEtAvancer(";");
+
+    Noeud* affect = nullptr;
+    if (m_lecteur.getSymbole() == "<VARIABLE>") {
+        affect = affectation();
+    }
+
+    testerEtAvancer(")");
+    Noeud* sequence = seqInst();
+    testerEtAvancer("finpour");
+
+    return new NoeudInstPour(init, condition, affect, sequence);
+}
+
+Noeud* Interpreteur::instTantQue() {
+    // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
+    testerEtAvancer("tantque");
+    testerEtAvancer("(");
+    Noeud* condition = expression();
+    testerEtAvancer(")");
+    Noeud* sequence = seqInst();
+    testerEtAvancer("fintantque");
+
+    return new NoeudInstTantQue(condition, sequence);
+}
