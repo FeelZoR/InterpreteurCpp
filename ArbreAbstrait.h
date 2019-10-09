@@ -82,6 +82,25 @@ class NoeudInstSi : public Noeud {
 };
 
 ////////////////////////////////////////////////////////////////////////////////
+class NoeudInstPour : public Noeud {
+    // Classe pour représenter un noeud "instruction pour"
+    //  et ses 2 fils : la condition du pour et la séquence d'instruction associée
+public:
+    NoeudInstPour(Noeud* init, Noeud* condition, Noeud* affectation, Noeud* sequence);
+    // Construit une "instruction si" avec sa condition et sa séquence d'instruction
+
+    ~NoeudInstPour() {
+    } // A cause du destructeur virtuel de la classe Noeud
+    int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
+
+private:
+    Noeud* m_init;
+    Noeud* m_condition;
+    Noeud* m_affectation;
+    Noeud* m_sequence;
+};
+
+//////////////////////////////////////////////////////////////////////////////// 
 class NoeudInstTantQue : public Noeud {
     // Classe pour représenter un noeud "instruction tant que"
     //  et ses 2 fils : la condition du tant que et la séquence d'instruction associée
