@@ -5,5 +5,8 @@ procedure principale()
   si (i>14)
     j=1;
   finsi
+  pour (d = 0 ; d < 10 ; d = d + 1)
+    j = j + 1;
+  finpour
 finproc
 # Commentaire Final
