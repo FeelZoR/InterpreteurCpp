@@ -1,7 +1,6 @@
 #include "Interpreteur.h"
 #include <stdlib.h>
 #include <iostream>
-#include <valarray>
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
@@ -145,13 +144,13 @@ Noeud* Interpreteur::instSi() {
 }
 
 
-Noeud* Interpreteur::instrepeter() { 
+Noeud* Interpreteur::interpreter() { 
     // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
     testerEtAvancer("repeter");
-    Noeud* sequance = seqInst(); // Stokage instruction
+    Noeud* sequence = seqInst(); // Stokage instruction
     testerEtAvancer("jusqua");
     testerEtAvancer("(");
     Noeud* condition = expression(); // stockage condtion
     testerEtAvancer(")");
-   return new NoeudInstRepeter(sequance,condition);
+   return new NoeudInstRepeter(sequence,condition);
 }   
