@@ -56,7 +56,7 @@ Noeud* Interpreteur::seqInst() {
   NoeudSeqInst* sequence = new NoeudSeqInst();
   do {
     sequence->ajoute(inst());
-  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "tantque");
+  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter");
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -77,6 +77,9 @@ Noeud* Interpreteur::inst() {
       return instTantQue();
   }
   // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
+  else if(m_lecteur.getSymbole() == "repeter"){
+      return interpreter();  
+  }
   else {
       erreur("Instruction incorrecte");
       return nullptr;
@@ -144,6 +147,19 @@ Noeud* Interpreteur::instSi() {
   testerEtAvancer("finsi");
   return new NoeudInstSi(condition, sequence); // Et on renvoie un noeud Instruction Si
 }
+
+
+
+Noeud* Interpreteur::interpreter() { 
+    // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
+    testerEtAvancer("repeter");
+    Noeud* sequence = seqInst(); // Stokage instruction
+    testerEtAvancer("jusqua");
+    testerEtAvancer("(");
+    Noeud* condition = expression(); // stockage condtion
+    testerEtAvancer(")");
+   return new NoeudInstRepeter(sequence,condition);
+}   
 
 Noeud* Interpreteur::instPour() {
     // <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
