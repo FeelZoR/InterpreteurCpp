@@ -94,5 +94,18 @@ int NoeudInstPour::executer() {
         m_sequence->executer();
         if (m_affectation != nullptr) m_affectation->executer();
     }
+    return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstTantQue
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
+: m_condition(condition), m_sequence(sequence) {
+}
+
+int NoeudInstTantQue::executer() {
+    while (m_condition->executer()) m_sequence->executer();
     return 0; // La valeur renvoyée ne représente rien !
 }
