@@ -140,3 +140,14 @@ Noeud* Interpreteur::instSi() {
   return new NoeudInstSi(condition, sequence); // Et on renvoie un noeud Instruction Si
 }
 
+
+Noeud* Interpreteur::repeter() { 
+    // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
+    testerEtAvancer("repeter");
+    Noeud* sequance = seqInst(); // Stokage instruction
+    testerEtAvancer("jusqua");
+    testerEtAvancer("(");
+    Noeud* condition = expression(); // stockage condtion
+    testerEtAvancer(")");
+    return nullptr;   
+}   
