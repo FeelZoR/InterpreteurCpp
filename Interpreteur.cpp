@@ -165,5 +165,5 @@ Noeud* Interpreteur::instPour() {
     Noeud* sequence = seqInst();
     testerEtAvancer("finpour");
 
-    return nullptr;
+    return new NoeudInstPour(init, condition, affect, sequence);
 }
