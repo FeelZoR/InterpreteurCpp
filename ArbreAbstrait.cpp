@@ -79,3 +79,16 @@ int NoeudInstSi::executer() {
   if (m_condition->executer()) m_sequence->executer();
   return 0; // La valeur renvoyée ne représente rien !
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstSi
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstRepeter::NoeudInstRepeter(Noeud* instruction, Noeud* condition) : m_sequence(instruction), m_condition(condition) {
+
+}
+
+int NoeudInstRepeter::executer(){
+    do{ m_sequence->executer(); 
+    }while( ! m_condition->executer());
+}

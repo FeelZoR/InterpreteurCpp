@@ -153,5 +153,5 @@ Noeud* Interpreteur::instrepeter() {
     testerEtAvancer("(");
     Noeud* condition = expression(); // stockage condtion
     testerEtAvancer(")");
-    return nullptr;   
+   return new NoeudInstRepeter(sequance,condition);
 }   

@@ -80,5 +80,19 @@ class NoeudInstSi : public Noeud {
     Noeud*  m_condition;
     Noeud*  m_sequence;
 };
+////////////////////////////////////////////////////////////////////////////////
+class NoeudInstRepeter : public Noeud {
+        // Boucle do while
+        // et ses 2 fils : le jeu d'instrcution et la condition 
+    public :
+        NoeudInstRepeter(Noeud* instruction, Noeud* condition);
+
+        ~NoeudInstRepeter() {}
+        int executer() override;
+
+    private:
+        Noeud* m_sequence;
+        Noeud* m_condition;
+};
 
 #endif /* ARBREABSTRAIT_H */
