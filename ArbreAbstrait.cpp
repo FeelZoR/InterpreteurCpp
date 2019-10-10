@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <typeinfo>
 #include "ArbreAbstrait.h"
 #include "Symbole.h"
 #include "SymboleValue.h"
@@ -78,4 +79,27 @@ NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
 int NoeudInstSi::executer() {
   if (m_condition->executer()) m_sequence->executer();
   return 0; // La valeur renvoyée ne représente rien !
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstEcrire
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstEcrire::NoeudInstEcrire() {
+}
+
+void NoeudInstEcrire::ajoute(Noeud* instruction) {
+    m_ecritures.push_back(instruction);
+}
+
+int NoeudInstEcrire::executer() {
+    for (Noeud* inst : m_ecritures) {
+        if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
+            string s = ((SymboleValue*) inst)->getChaine();
+            cout << s.substr(1, s.size() - 2); // On retire le premier et le dernier caractère (les ")
+        } else {
+            cout << inst->executer();
+        }
+    }
+    return 0; // La valeur renvoyée ne représente rien !
 }

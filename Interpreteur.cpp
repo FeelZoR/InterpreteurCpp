@@ -143,19 +143,18 @@ Noeud* Interpreteur::instSi() {
   return new NoeudInstSi(condition, sequence); // Et on renvoie un noeud Instruction Si
 }
 
-
 Noeud* Interpreteur::instEcrire() {
     //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     //      <chaine> ::= " { <lettre> } "
     testerEtAvancer("ecrire");
     testerEtAvancer("(");
-    Noeud* ecrire = nullptr;
+    Noeud* ecrire = new NoeudInstEcrire();
     do {
         if (m_lecteur.getSymbole() == "<CHAINE>") {
-            m_table.chercheAjoute(m_lecteur.getSymbole()); // TODO: Ajout Noeud* dans ecrire
+            ecrire->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()));
             m_lecteur.avancer();
         } else {
-            expression(); // TODO: Ajout Noeud* dans ecrire
+            ecrire->ajoute(expression());
         }
     } while (m_lecteur.verifierPourAvancer(","));
     testerEtAvancer(")");
