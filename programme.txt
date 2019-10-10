@@ -1,22 +1,23 @@
 # Fichier de test
 # Les lignes de commentaires commencent par #
 procedure principale()
-i = 0;
-repeter
-    i = i + 1;
-jusqua (i>9)
-  i = 12+3;
-  si (i>14)
-    j=1;
-  finsi
+    i = 0;
+    repeter
+        i = i + 1;
+    jusqua (i>9)
+    i = 12+3;
+    si (i>14)
+        j=1;
+    finsi
 
-  pour (d = 0 ; d < 10 ; d = d + 1)
-    j = j + 1;
-  finpour
+    pour (d = 0 ; d < 10 ; d = d + 1)
+        j = j + 1;
+    finpour
 
-  tantque (i>5)
-    i=i-1;
-  fintantque
-
+    tantque (i>5)
+        i=i-1;
+    fintantque
+  
+    lire(var1,var2);
 finproc
 # Commentaire Final
