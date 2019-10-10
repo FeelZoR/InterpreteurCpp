@@ -5,5 +5,7 @@ procedure principale()
   si (i>14)
     j=1;
   finsi
+
+  ecrire("Canard", 25, " ", 3);
 finproc
 # Commentaire Final

@@ -56,7 +56,7 @@ Noeud* Interpreteur::seqInst() {
   NoeudSeqInst* sequence = new NoeudSeqInst();
   do {
     sequence->ajoute(inst());
-  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si");
+  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "ecrire");
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
@@ -68,6 +68,9 @@ Noeud* Interpreteur::inst() {
     Noeud *affect = affectation();
     testerEtAvancer(";");
     return affect;
+  }
+  else if (m_lecteur.getSymbole() == "ecrire") {
+      return instEcrire();
   }
   else if (m_lecteur.getSymbole() == "si")
     return instSi();
@@ -140,3 +143,23 @@ Noeud* Interpreteur::instSi() {
   return new NoeudInstSi(condition, sequence); // Et on renvoie un noeud Instruction Si
 }
 
+
+Noeud* Interpreteur::instEcrire() {
+    //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
+    //      <chaine> ::= " { <lettre> } "
+    testerEtAvancer("ecrire");
+    testerEtAvancer("(");
+    Noeud* ecrire = nullptr;
+    do {
+        if (m_lecteur.getSymbole() == "<CHAINE>") {
+            m_table.chercheAjoute(m_lecteur.getSymbole()); // TODO: Ajout Noeud* dans ecrire
+            m_lecteur.avancer();
+        } else {
+            expression(); // TODO: Ajout Noeud* dans ecrire
+        }
+    } while (m_lecteur.verifierPourAvancer(","));
+    testerEtAvancer(")");
+    testerEtAvancer(";");
+
+    return ecrire;
+}

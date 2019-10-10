@@ -28,12 +28,13 @@ private:
     // Implémentation de la grammaire
     Noeud*  programme();   //   <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
     Noeud*  seqInst();	   //     <seqInst> ::= <inst> { <inst> }
-    Noeud*  inst();	       //        <inst> ::= <affectation> ; | <instSi>
+    Noeud*  inst();	   //        <inst> ::= <affectation> ; | <instSi>
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
     Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> finsi
+    Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
 
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception
