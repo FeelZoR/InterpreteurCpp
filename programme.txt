@@ -17,7 +17,7 @@ procedure principale()
     tantque (i>5)
         i=i-1;
     fintantque
-  
-    lire(var1,var2);
+
+    lire (var1,var2);
 finproc
 # Commentaire Final

@@ -137,11 +137,13 @@ class NoeudInstLire : public Noeud{
 public:
     NoeudInstLire();
     //construit une instruction lire avec ces variables
-    ~NoeudInstLire();
+    ~NoeudInstLire(){
+        
+    }
     
     int executer() override;
     
-    void ajouter(Noeud* var);
+    void ajoute(Noeud* var) override;
 
 private:
     std::vector<Noeud*> m_variables;

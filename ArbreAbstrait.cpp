@@ -130,7 +130,7 @@ int NoeudInstTantQue::executer() {
 // NoeudInstLire
 ////////////////////////////////////////////////////////////////////////////////
 NoeudInstLire::NoeudInstLire() { 
-    m_variables = std::vector<Noeud*>();
+    m_variables = vector<Noeud*>();
 }
 
 int NoeudInstLire::executer() {
@@ -138,11 +138,18 @@ int NoeudInstLire::executer() {
         int val;
         cout << "Saisir un entier : ";
         cin >> val;
-        ((SymboleValue*)var)->setValeur(val);
+        if(!cin.fail()){
+            ((SymboleValue*)var)->setValeur(val);
+        } else {
+            cout << "Vous avez saisier un non entier un zero a éte mis a la place de votre valeur " << endl;
+            cin.clear();
+            cin.ignore(10000,'\n');
+            ((SymboleValue*)var)->setValeur(0);  
+        }
     }
     return 0;
 }
 
-void NoeudInstLire::ajouter(Noeud* var){
+void NoeudInstLire::ajoute(Noeud* var){
     m_variables.push_back(var);
 }

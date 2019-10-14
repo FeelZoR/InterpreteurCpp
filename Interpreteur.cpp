@@ -206,10 +206,10 @@ Noeud* Interpreteur::instTantQue() {
 Noeud* Interpreteur::instLire(){
     //<instLire>  ::= lire (variable {, variable});
     Noeud* var = new NoeudInstLire();
-    var->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()))
     testerEtAvancer("lire");
     testerEtAvancer("(");
     tester("<VARIABLE>");
+    var->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()));
     m_lecteur.avancer();
  
     while(m_lecteur.getSymbole() == ","){
