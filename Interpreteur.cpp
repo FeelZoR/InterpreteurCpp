@@ -92,7 +92,7 @@ Noeud* Interpreteur::inst() {
 Noeud* Interpreteur::affectation() {
   // <affectation> ::= <variable> = <expression> 
   tester("<VARIABLE>");
-  Noeud* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // La variable est ajoutée à la table eton la mémorise
+  Noeud* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // La variable est ajoutée à la table et on la mémorise
   m_lecteur.avancer();
   testerEtAvancer("=");
   Noeud* exp = expression();             // On mémorise l'expression trouvée
@@ -205,20 +205,20 @@ Noeud* Interpreteur::instTantQue() {
 
 Noeud* Interpreteur::instLire(){
     //<instLire>  ::= lire (variable {, variable});
+    Noeud* var = new NoeudInstLire();
+    var->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()))
     testerEtAvancer("lire");
     testerEtAvancer("(");
     tester("<VARIABLE>");
-    m_table.chercheAjoute(m_lecteur.getSymbole());
     m_lecteur.avancer();
  
     while(m_lecteur.getSymbole() == ","){
         m_lecteur.avancer();
         tester("<VARIABLE>");
-        m_table.chercheAjoute(m_lecteur.getSymbole());
+        var->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()));
         m_lecteur.avancer();     
     }
     testerEtAvancer(")");
     testerEtAvancer(";");
-    
-    return nullptr;
+    return var;
 }

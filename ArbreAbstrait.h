@@ -131,4 +131,20 @@ private:
     Noeud* m_sequence;
 };
 
+
+class NoeudInstLire : public Noeud{
+    // Classe pour représanter un noeud "Instruction Lire"
+public:
+    NoeudInstLire();
+    //construit une instruction lire avec ces variables
+    ~NoeudInstLire();
+    
+    int executer() override;
+    
+    void ajouter(Noeud* var);
+
+private:
+    std::vector<Noeud*> m_variables;
+};
+
 #endif /* ARBREABSTRAIT_H */

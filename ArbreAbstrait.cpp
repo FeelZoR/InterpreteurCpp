@@ -124,3 +124,25 @@ int NoeudInstTantQue::executer() {
     while (m_condition->executer()) m_sequence->executer();
     return 0; // La valeur renvoyée ne représente rien !
 }
+
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstLire
+////////////////////////////////////////////////////////////////////////////////
+NoeudInstLire::NoeudInstLire() { 
+    m_variables = std::vector<Noeud*>();
+}
+
+int NoeudInstLire::executer() {
+    for(Noeud* var : m_variables){
+        int val;
+        cout << "Saisir un entier : ";
+        cin >> val;
+        ((SymboleValue*)var)->setValeur(val);
+    }
+    return 0;
+}
+
+void NoeudInstLire::ajouter(Noeud* var){
+    m_variables.push_back(var);
+}
