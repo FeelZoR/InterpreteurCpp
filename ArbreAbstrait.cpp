@@ -141,7 +141,7 @@ int NoeudInstLire::executer() {
         if(!cin.fail()){
             ((SymboleValue*)var)->setValeur(val);
         } else {
-            cout << "Vous avez saisier un non entier un zero a éte mis a la place de votre valeur " << endl;
+            cout << "La valeur que vous avez saisie n'est pas un entier. La valeur zéro a été attribuée par défaut." << endl;
             cin.clear();
             cin.ignore(10000,'\n');
             ((SymboleValue*)var)->setValeur(0);  
