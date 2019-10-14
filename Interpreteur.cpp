@@ -150,7 +150,7 @@ Noeud* Interpreteur::instSi() {
 
 
 
-Noeud* Interpreteur::interpreter() { 
+Noeud* Interpreteur::instRepeter() {
     // <instRepeter> ::=repeter <seqInst> jusqua( <expression> )
     testerEtAvancer("repeter");
     Noeud* sequence = seqInst(); // Stokage instruction
