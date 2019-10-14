@@ -24,6 +24,17 @@ void Lecteur::avancer() {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+bool Lecteur::verifierPourAvancer(string attendu) {
+    if (getSymbole() == attendu) {
+        avancer();
+        return true;
+    }
+
+    return false;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 void Lecteur::sauterSeparateurs() {
   while (m_lecteurCar.getCaractere() == ' ' ||
           m_lecteurCar.getCaractere() == '\t' ||

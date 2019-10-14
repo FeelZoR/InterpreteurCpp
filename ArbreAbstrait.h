@@ -76,9 +76,12 @@ class NoeudInstSi : public Noeud {
    ~NoeudInstSi() {}         // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
 
+    void ajoute(Noeud* condition) override;
+
   private:
     Noeud*  m_condition;
     Noeud*  m_sequence;
+    Noeud*  m_prochaineCondition;
 };
 ////////////////////////////////////////////////////////////////////////////////
 class NoeudInstRepeter : public Noeud {
@@ -132,7 +135,7 @@ private:
 };
 
 
-class NoeudInstLire : public Noeud{
+class NoeudInstLire : public Noeud {
     // Classe pour représanter un noeud "Instruction Lire"
 public:
     NoeudInstLire();
@@ -147,6 +150,24 @@ public:
 
 private:
     std::vector<Noeud*> m_variables;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class NoeudInstEcrire : public Noeud {
+    // Classe pour représenter un noeud "instruction ecrire"
+    //  et ses 2 fils : la condition du ecrire et la séquence d'instruction associée
+public:
+    NoeudInstEcrire();
+    // Construit une "instruction ecrire" avec sa condition et sa séquence d'instruction
+
+    virtual void ajoute(Noeud* instruction);
+
+    ~NoeudInstEcrire() {
+    } // A cause du destructeur virtuel de la classe Noeud
+    int executer() override; // Exécute l'instruction ecrire : ecrire condition vraie on exécute la séquence
+
+private:
+    std::vector<Noeud*> m_ecritures;
 };
 
 #endif /* ARBREABSTRAIT_H */

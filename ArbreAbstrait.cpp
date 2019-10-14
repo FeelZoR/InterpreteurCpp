@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <typeinfo>
 #include "ArbreAbstrait.h"
 #include "Symbole.h"
 #include "SymboleValue.h"
@@ -72,12 +73,23 @@ int NoeudOperateurBinaire::executer() {
 ////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
-: m_condition(condition), m_sequence(sequence) {
+: m_condition(condition), m_sequence(sequence), m_prochaineCondition(nullptr) {
 }
 
 int NoeudInstSi::executer() {
-  if (m_condition->executer()) m_sequence->executer();
-  return 0; // La valeur renvoyée ne représente rien !
+    if (m_condition->executer()) m_sequence->executer();
+    else if (m_prochaineCondition != nullptr) {
+        m_prochaineCondition->executer();
+    }
+    return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstSi::ajoute(Noeud* condition) {
+    if (m_prochaineCondition == nullptr) {
+        m_prochaineCondition = condition;
+    } else {
+        m_prochaineCondition->ajoute(condition);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -125,7 +137,6 @@ int NoeudInstTantQue::executer() {
     return 0; // La valeur renvoyée ne représente rien !
 }
 
-
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstLire
 ////////////////////////////////////////////////////////////////////////////////
@@ -152,4 +163,27 @@ int NoeudInstLire::executer() {
 
 void NoeudInstLire::ajoute(Noeud* var){
     m_variables.push_back(var);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstEcrire
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstEcrire::NoeudInstEcrire() {
+}
+
+void NoeudInstEcrire::ajoute(Noeud* instruction) {
+    m_ecritures.push_back(instruction);
+}
+
+int NoeudInstEcrire::executer() {
+    for (Noeud* inst : m_ecritures) {
+        if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
+            string s = ((SymboleValue*) inst)->getChaine();
+            cout << s.substr(1, s.size() - 2); // On retire le premier et le dernier caractère (les ")
+        } else {
+            cout << inst->executer();
+        }
+    }
+    return 0; // La valeur renvoyée ne représente rien !
 }
