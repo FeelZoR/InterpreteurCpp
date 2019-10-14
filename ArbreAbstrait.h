@@ -76,9 +76,62 @@ class NoeudInstSi : public Noeud {
    ~NoeudInstSi() {}         // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
 
+    void ajoute(Noeud* condition) override;
+
   private:
     Noeud*  m_condition;
     Noeud*  m_sequence;
+    Noeud*  m_prochaineCondition;
+};
+////////////////////////////////////////////////////////////////////////////////
+class NoeudInstRepeter : public Noeud {
+        // Boucle do while
+        // et ses 2 fils : le jeu d'instrcution et la condition 
+    public :
+        NoeudInstRepeter(Noeud* instruction, Noeud* condition);
+
+        ~NoeudInstRepeter() {}
+        int executer() override;
+
+    private:
+        Noeud* m_sequence;
+        Noeud* m_condition;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+class NoeudInstPour : public Noeud {
+    // Classe pour représenter un noeud "instruction pour"
+    //  et ses 2 fils : la condition du pour et la séquence d'instruction associée
+public:
+    NoeudInstPour(Noeud* init, Noeud* condition, Noeud* affectation, Noeud* sequence);
+    // Construit une "instruction si" avec sa condition et sa séquence d'instruction
+
+    ~NoeudInstPour() {
+    } // A cause du destructeur virtuel de la classe Noeud
+    int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
+
+private:
+    Noeud* m_init;
+    Noeud* m_condition;
+    Noeud* m_affectation;
+    Noeud* m_sequence;
+};
+
+//////////////////////////////////////////////////////////////////////////////// 
+class NoeudInstTantQue : public Noeud {
+    // Classe pour représenter un noeud "instruction tant que"
+    //  et ses 2 fils : la condition du tant que et la séquence d'instruction associée
+public:
+    NoeudInstTantQue(Noeud* condition, Noeud* sequence);
+    // Construit une "instruction tant que" avec sa condition et sa séquence d'instruction
+
+    ~NoeudInstTantQue() {
+    } // A cause du destructeur virtuel de la classe Noeud
+    int executer() override; // Exécute l'instruction tant que : tant que condition vraie on exécute la séquence
+
+private:
+    Noeud* m_condition;
+    Noeud* m_sequence;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -73,12 +73,68 @@ int NoeudOperateurBinaire::executer() {
 ////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
-: m_condition(condition), m_sequence(sequence) {
+: m_condition(condition), m_sequence(sequence), m_prochaineCondition(nullptr) {
 }
 
 int NoeudInstSi::executer() {
-  if (m_condition->executer()) m_sequence->executer();
-  return 0; // La valeur renvoyée ne représente rien !
+    if (m_condition->executer()) m_sequence->executer();
+    else if (m_prochaineCondition != nullptr) {
+        m_prochaineCondition->executer();
+    }
+    return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstSi::ajoute(Noeud* condition) {
+    if (m_prochaineCondition == nullptr) {
+        m_prochaineCondition = condition;
+    } else {
+        m_prochaineCondition->ajoute(condition);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstRepeter
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstRepeter::NoeudInstRepeter(Noeud* instruction, Noeud* condition) : m_sequence(instruction), m_condition(condition) {
+
+}
+
+int NoeudInstRepeter::executer(){
+    do{ m_sequence->executer(); 
+    }while( ! m_condition->executer());
+    
+    return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstPour
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstPour::NoeudInstPour(Noeud* init, Noeud* condition, Noeud* affect, Noeud* sequence)
+: m_init(init), m_condition(condition), m_affectation(affect), m_sequence(sequence) {
+}
+
+int NoeudInstPour::executer() {
+    if (m_init != nullptr) m_init->executer();
+    while (m_condition->executer()) {
+        m_sequence->executer();
+        if (m_affectation != nullptr) m_affectation->executer();
+    }
+    return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstTantQue
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
+: m_condition(condition), m_sequence(sequence) {
+}
+
+int NoeudInstTantQue::executer() {
+    while (m_condition->executer()) m_sequence->executer();
+    return 0; // La valeur renvoyée ne représente rien !
 }
 
 ////////////////////////////////////////////////////////////////////////////////
