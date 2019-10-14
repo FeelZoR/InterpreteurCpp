@@ -39,6 +39,7 @@ class Lecteur {
 public:
     Lecteur(ifstream & fichier); // Résultat : symbole = premier symbole du fichier
     void avancer(); // Passe au symbole suivant du fichier
+    bool verifierPourAvancer(string attendu); // Vérifie un symbole et passe au suivant s'il correspond
 
     inline const Symbole& getSymbole() const {
         return m_symbole;
