@@ -76,9 +76,12 @@ class NoeudInstSi : public Noeud {
    ~NoeudInstSi() {}         // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
 
+    void ajoute(Noeud* condition) override;
+
   private:
     Noeud*  m_condition;
     Noeud*  m_sequence;
+    Noeud*  m_prochaineCondition;
 };
 ////////////////////////////////////////////////////////////////////////////////
 class NoeudInstRepeter : public Noeud {

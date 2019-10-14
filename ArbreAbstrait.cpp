@@ -72,12 +72,23 @@ int NoeudOperateurBinaire::executer() {
 ////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
-: m_condition(condition), m_sequence(sequence) {
+: m_condition(condition), m_sequence(sequence), m_prochaineCondition(nullptr) {
 }
 
 int NoeudInstSi::executer() {
-  if (m_condition->executer()) m_sequence->executer();
-  return 0; // La valeur renvoyée ne représente rien !
+    if (m_condition->executer()) m_sequence->executer();
+    else if (m_prochaineCondition != nullptr) {
+        m_prochaineCondition->executer();
+    }
+    return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstSi::ajoute(Noeud* condition) {
+    if (m_prochaineCondition == nullptr) {
+        m_prochaineCondition = condition;
+    } else {
+        m_prochaineCondition->ajoute(condition);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////
