@@ -56,7 +56,7 @@ Noeud* Interpreteur::seqInst() {
   NoeudSeqInst* sequence = new NoeudSeqInst();
   do {
     sequence->ajoute(inst());
-  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter" || m_lecteur.getSymbole() == "ecrire");
+  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter" || m_lecteur.getSymbole() == "ecrire" || m_lecteur.getSymbole() == "lire");
 
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
@@ -83,6 +83,9 @@ Noeud* Interpreteur::inst() {
   // Compléter les alternatives chaque fois qu'on rajoute une nouvelle instruction
   else if(m_lecteur.getSymbole() == "repeter"){
       return instRepeter();  
+  } 
+  else if(m_lecteur.getSymbole() == "lire"){
+      return instLire();
   }
   else {
       erreur("Instruction incorrecte");
@@ -93,7 +96,7 @@ Noeud* Interpreteur::inst() {
 Noeud* Interpreteur::affectation() {
   // <affectation> ::= <variable> = <expression> 
   tester("<VARIABLE>");
-  Noeud* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // La variable est ajoutée à la table eton la mémorise
+  Noeud* var = m_table.chercheAjoute(m_lecteur.getSymbole()); // La variable est ajoutée à la table et on la mémorise
   m_lecteur.avancer();
   testerEtAvancer("=");
   Noeud* exp = expression();             // On mémorise l'expression trouvée
@@ -238,4 +241,25 @@ Noeud* Interpreteur::instTantQue() {
     testerEtAvancer("fintantque");
 
     return new NoeudInstTantQue(condition, sequence);
+}
+
+
+Noeud* Interpreteur::instLire(){
+    //<instLire>  ::= lire (variable {, variable});
+    Noeud* var = new NoeudInstLire();
+    testerEtAvancer("lire");
+    testerEtAvancer("(");
+    tester("<VARIABLE>");
+    var->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()));
+    m_lecteur.avancer();
+ 
+    while(m_lecteur.getSymbole() == ","){
+        m_lecteur.avancer();
+        tester("<VARIABLE>");
+        var->ajoute(m_table.chercheAjoute(m_lecteur.getSymbole()));
+        m_lecteur.avancer();     
+    }
+    testerEtAvancer(")");
+    testerEtAvancer(";");
+    return var;
 }

@@ -134,6 +134,24 @@ private:
     Noeud* m_sequence;
 };
 
+
+class NoeudInstLire : public Noeud {
+    // Classe pour représanter un noeud "Instruction Lire"
+public:
+    NoeudInstLire();
+    //construit une instruction lire avec ces variables
+    ~NoeudInstLire(){
+        
+    }
+    
+    int executer() override;
+    
+    void ajoute(Noeud* var) override;
+
+private:
+    std::vector<Noeud*> m_variables;
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 class NoeudInstEcrire : public Noeud {
     // Classe pour représenter un noeud "instruction ecrire"

@@ -138,6 +138,34 @@ int NoeudInstTantQue::executer() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// NoeudInstLire
+////////////////////////////////////////////////////////////////////////////////
+NoeudInstLire::NoeudInstLire() { 
+    m_variables = vector<Noeud*>();
+}
+
+int NoeudInstLire::executer() {
+    for(Noeud* var : m_variables){
+        int val;
+        cout << "Saisir un entier : ";
+        cin >> val;
+        if(!cin.fail()){
+            ((SymboleValue*)var)->setValeur(val);
+        } else {
+            cout << "La valeur que vous avez saisie n'est pas un entier. La valeur zéro a été attribuée par défaut." << endl;
+            cin.clear();
+            cin.ignore(10000,'\n');
+            ((SymboleValue*)var)->setValeur(0);  
+        }
+    }
+    return 0;
+}
+
+void NoeudInstLire::ajoute(Noeud* var){
+    m_variables.push_back(var);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // NoeudInstEcrire
 ////////////////////////////////////////////////////////////////////////////////
 

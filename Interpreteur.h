@@ -35,9 +35,11 @@ private:
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi (<expression>) <seqInst> } [ sinon <seqInst> ] finsi
-    Noeud* instEcrire(); //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     Noeud*  instPour();    //    <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
+    Noeud*  interpreter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
+    Noeud*  instLire();    //   <instLire>  ::= lire (variable {, variable});
+    Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
 
     // outils pour simplifier l'analyse syntaxique
