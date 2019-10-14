@@ -18,5 +18,21 @@ jusqua (i>9)
     i=i-1;
   fintantque
 
+  si (i > 10)
+    i=25;
+  sinon
+    i=12;
+  finsi
+
+  si (j > 30)
+    j=23;
+  sinonsi (j > 10)
+    j=5;
+  sinonsi (j < 0)
+    j=99;
+  sinon
+    j=-12;
+  finsi
+
 finproc
 # Commentaire Final
