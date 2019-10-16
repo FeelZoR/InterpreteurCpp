@@ -18,6 +18,7 @@ class Noeud {
 // Remarque : la classe ne contient aucun constructeur
   public:
     virtual int  executer() =0 ; // Méthode pure (non implémentée) qui rend la classe abstraite
+    virtual void compiler(ostream & out, unsigned int indentation) =0 ;
     virtual void ajoute(Noeud* instruction) { throw OperationInterditeException(); }
     virtual ~Noeud() {} // Présence d'un destructeur virtuel conseillée dans les classes abstraites
 };
@@ -30,6 +31,7 @@ class NoeudSeqInst : public Noeud {
      NoeudSeqInst();         // Construit une séquence d'instruction vide
     ~NoeudSeqInst() {}       // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute chaque instruction de la séquence
+    void compiler(ostream & out, unsigned int indentation) override;
     void ajoute(Noeud* instruction) override;  // Ajoute une instruction à la séquence
 
   private:
@@ -44,6 +46,7 @@ class NoeudAffectation : public Noeud {
      NoeudAffectation(Noeud* variable, Noeud* expression); // construit une affectation
     ~NoeudAffectation() {}   // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute (évalue) l'expression et affecte sa valeur à la variable
+    void compiler(ostream & out, unsigned int indentation) override;
 
   private:
     Noeud* m_variable;
@@ -59,6 +62,7 @@ class NoeudOperateurBinaire : public Noeud {
     // Construit une opération binaire : operandeGauche operateur OperandeDroit
    ~NoeudOperateurBinaire() {} // A cause du destructeur virtuel de la classe Noeud
     int executer() override;   // Exécute (évalue) l'opération binaire)
+    void compiler(ostream & out, unsigned int indentation) override;
 
   private:
     Symbole m_operateur;
@@ -75,6 +79,7 @@ class NoeudInstSi : public Noeud {
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstSi() {}         // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
+    void compiler(ostream & out, unsigned int indentation) override;
 
     void ajoute(Noeud* condition) override;
 
@@ -87,15 +92,16 @@ class NoeudInstSi : public Noeud {
 class NoeudInstRepeter : public Noeud {
         // Boucle do while
         // et ses 2 fils : le jeu d'instrcution et la condition 
-    public :
-        NoeudInstRepeter(Noeud* instruction, Noeud* condition);
+public :
+    NoeudInstRepeter(Noeud* instruction, Noeud* condition);
 
-        ~NoeudInstRepeter() {}
-        int executer() override;
+    ~NoeudInstRepeter() {}
+    int executer() override;
+    void compiler(ostream & out, unsigned int indentation) override;
 
-    private:
-        Noeud* m_sequence;
-        Noeud* m_condition;
+private:
+    Noeud* m_sequence;
+    Noeud* m_condition;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -109,6 +115,7 @@ public:
     ~NoeudInstPour() {
     } // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction si : si condition vraie on exécute la séquence
+    void compiler(ostream & out, unsigned int indentation) override;
 
 private:
     Noeud* m_init;
@@ -128,6 +135,7 @@ public:
     ~NoeudInstTantQue() {
     } // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction tant que : tant que condition vraie on exécute la séquence
+    void compiler(ostream & out, unsigned int indentation) override;
 
 private:
     Noeud* m_condition;
@@ -145,6 +153,7 @@ public:
     }
     
     int executer() override;
+    void compiler(ostream & out, unsigned int indentation) override;
     
     void ajoute(Noeud* var) override;
 
@@ -165,6 +174,7 @@ public:
     ~NoeudInstEcrire() {
     } // A cause du destructeur virtuel de la classe Noeud
     int executer() override; // Exécute l'instruction ecrire : ecrire condition vraie on exécute la séquence
+    void compiler(ostream & out, unsigned int indentation) override;
 
 private:
     std::vector<Noeud*> m_ecritures;

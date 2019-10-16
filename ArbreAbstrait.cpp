@@ -18,6 +18,11 @@ int NoeudSeqInst::executer() {
   return 0; // La valeur renvoyée ne représente rien !
 }
 
+
+void NoeudSeqInst::compiler(ostream & out, unsigned int indentation) {
+    
+}
+
 void NoeudSeqInst::ajoute(Noeud* instruction) {
   if (instruction!=nullptr) m_instructions.push_back(instruction);
 }
@@ -34,6 +39,10 @@ int NoeudAffectation::executer() {
   int valeur = m_expression->executer(); // On exécute (évalue) l'expression
   ((SymboleValue*) m_variable)->setValeur(valeur); // On affecte la variable
   return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudAffectation::compiler(ostream & out, unsigned int indentation) {
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,6 +77,10 @@ int NoeudOperateurBinaire::executer() {
   return valeur; // On retourne la valeur calculée
 }
 
+void NoeudOperateurBinaire::compiler(ostream & out, unsigned int indentation) {
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstSi
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,6 +95,10 @@ int NoeudInstSi::executer() {
         m_prochaineCondition->executer();
     }
     return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstSi::compiler(ostream & out, unsigned int indentation) {
+
 }
 
 void NoeudInstSi::ajoute(Noeud* condition) {
@@ -107,6 +124,10 @@ int NoeudInstRepeter::executer(){
     return 0;
 }
 
+void NoeudInstRepeter::compiler(ostream & out, unsigned int indentation) {
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstPour
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,6 +145,10 @@ int NoeudInstPour::executer() {
     return 0;
 }
 
+void NoeudInstPour::compiler(ostream & out, unsigned int indentation) {
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoeudInstTantQue
 ////////////////////////////////////////////////////////////////////////////////
@@ -135,6 +160,10 @@ NoeudInstTantQue::NoeudInstTantQue(Noeud* condition, Noeud* sequence)
 int NoeudInstTantQue::executer() {
     while (m_condition->executer()) m_sequence->executer();
     return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstTantQue::compiler(ostream & out, unsigned int indentation) {
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -159,6 +188,10 @@ int NoeudInstLire::executer() {
         }
     }
     return 0;
+}
+
+void NoeudInstLire::compiler(ostream & out, unsigned int indentation) {
+
 }
 
 void NoeudInstLire::ajoute(Noeud* var){
@@ -186,4 +219,8 @@ int NoeudInstEcrire::executer() {
         }
     }
     return 0; // La valeur renvoyée ne représente rien !
+}
+
+void NoeudInstEcrire::compiler(ostream & out, unsigned int indentation) {
+
 }
