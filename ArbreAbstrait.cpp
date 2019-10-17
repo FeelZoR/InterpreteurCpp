@@ -42,7 +42,11 @@ int NoeudAffectation::executer() {
 }
 
 void NoeudAffectation::compiler(ostream & out, unsigned int indentation) {
-
+    std::string indent(indentation * 4 , ' ');
+    m_variable->compiler(out,0);
+    out << "=";
+    m_expression->compiler(out,0);
+    out << ";" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
