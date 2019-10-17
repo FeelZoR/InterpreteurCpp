@@ -189,7 +189,12 @@ int NoeudInstTantQue::executer() {
 }
 
 void NoeudInstTantQue::compiler(ostream & out, unsigned int indentation) {
-
+    std::string indent(indentation * 4, ' ');
+    out << indent << "while (";
+    m_condition->compiler(out,0);
+    out << ") {" << endl;
+    m_sequence->compiler(out,indentation +1 );
+    out << "}" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
