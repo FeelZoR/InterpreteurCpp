@@ -82,11 +82,13 @@ class NoeudInstSi : public Noeud {
     void compiler(ostream & out, unsigned int indentation) override;
 
     void ajoute(Noeud* condition) override;
+    void setIsPremiereCondition(bool value);
 
   private:
     Noeud*  m_condition;
     Noeud*  m_sequence;
     Noeud*  m_prochaineCondition;
+    bool    m_isPremiereCondition;
 };
 ////////////////////////////////////////////////////////////////////////////////
 class NoeudInstRepeter : public Noeud {

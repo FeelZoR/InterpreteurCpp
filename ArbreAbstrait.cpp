@@ -86,11 +86,11 @@ void NoeudOperateurBinaire::compiler(ostream & out, unsigned int indentation) {
 ////////////////////////////////////////////////////////////////////////////////
 
 NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
-: m_condition(condition), m_sequence(sequence), m_prochaineCondition(nullptr) {
+: m_condition(condition), m_sequence(sequence), m_prochaineCondition(nullptr), m_isPremiereCondition(true) {
 }
 
 int NoeudInstSi::executer() {
-    if (m_condition->executer()) m_sequence->executer();
+    if (m_condition != nullptr && m_condition->executer()) m_sequence->executer();
     else if (m_prochaineCondition != nullptr) {
         m_prochaineCondition->executer();
     }
@@ -98,15 +98,36 @@ int NoeudInstSi::executer() {
 }
 
 void NoeudInstSi::compiler(ostream & out, unsigned int indentation) {
+    std::string indent(indentation * 4, ' ');
+    if (m_condition != nullptr) {
+        if (m_isPremiereCondition) { out << indent; }
+        else { out << ' '; }
+        out << "if (";
+        m_condition->compiler(out, 0);
+        out << ")";
+    }
 
+    out << " {" << endl;
+    m_sequence->compiler(out, indentation + 1);
+    out << indent << "}" << endl;
+
+    if (m_prochaineCondition != nullptr) {
+        out << indent << "else";
+        m_prochaineCondition->compiler(out, indentation);
+    }
 }
 
 void NoeudInstSi::ajoute(Noeud* condition) {
+    ((NoeudInstSi*) condition)->setIsPremiereCondition(false);
     if (m_prochaineCondition == nullptr) {
         m_prochaineCondition = condition;
     } else {
         m_prochaineCondition->ajoute(condition);
     }
+}
+
+void NoeudInstSi::setIsPremiereCondition(bool value) {
+    m_isPremiereCondition = value;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
