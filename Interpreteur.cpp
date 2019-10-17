@@ -165,9 +165,8 @@ Noeud* Interpreteur::instSi() {
 
   if (m_lecteur.getSymbole() == "sinon") {
       m_lecteur.avancer();
-      condition = new SymboleValue(Symbole("1"));
       sequence = seqInst();
-      result->ajoute(new NoeudInstSi(condition, sequence));
+      result->ajoute(new NoeudInstSi(nullptr, sequence));
   }
 
   testerEtAvancer("finsi");
