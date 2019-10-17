@@ -191,7 +191,13 @@ int NoeudInstLire::executer() {
 }
 
 void NoeudInstLire::compiler(ostream & out, unsigned int indentation) {
+    out << std::string(4 * indentation, ' ') << "std::cin";
+    for (Noeud* var : m_variables) {
+        out << " >> ";
+        var->compiler(out, indentation);
+    }
 
+    out << ";" << endl;
 }
 
 void NoeudInstLire::ajoute(Noeud* var){
