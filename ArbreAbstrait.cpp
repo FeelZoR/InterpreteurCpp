@@ -190,7 +190,16 @@ int NoeudInstPour::executer() {
 }
 
 void NoeudInstPour::compiler(ostream & out, unsigned int indentation) {
-
+    std::string indent(4 * indentation, ' ');
+    out << indent << "for (";
+    if (m_init != nullptr) m_init->compiler(out, 0);
+    out << ";";
+    m_condition->compiler(out, 0);
+    out << ";";
+    if (m_affectation != nullptr) m_affectation->compiler(out, 0);
+    out << ") {" << endl;
+    m_sequence->compiler(out, indentation + 1);
+    out << indent << "}" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
