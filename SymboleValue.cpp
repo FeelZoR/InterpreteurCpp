@@ -20,7 +20,7 @@ int SymboleValue::executer() {
   return m_valeur;
 }
 
-void SymboleValue::compiler(ostream & out, unsigned int indentation) {
+void SymboleValue::compiler(ostream & out, int indentation) {
     out << getChaine();
 }
 

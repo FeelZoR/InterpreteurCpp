@@ -14,7 +14,7 @@ public:
 	  SymboleValue(const Symbole & s); // Construit un symbole valué à partir d'un symbole existant s
 	  ~SymboleValue( ) {}
 	  int  executer() override;        // exécute le SymboleValue (revoie sa valeur !)
-          void compiler(ostream & out, unsigned int indentation) override;
+          void compiler(ostream & out, int indentation) override;
 	  inline void setValeur(int valeur)    { this->m_valeur=valeur; m_defini=true;  } // accesseur
 	  inline bool estDefini()              { return m_defini;                       } // accesseur
 

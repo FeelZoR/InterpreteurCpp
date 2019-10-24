@@ -19,7 +19,7 @@ int NoeudSeqInst::executer() {
 }
 
 
-void NoeudSeqInst::compiler(ostream & out, unsigned int indentation) {
+void NoeudSeqInst::compiler(ostream & out, int indentation) {
     for (unsigned int i = 0; i < m_instructions.size(); i++) {
         cout << std::string(indentation * 4, ' ');
         m_instructions[i]->compiler(out, indentation);
@@ -45,12 +45,17 @@ int NoeudAffectation::executer() {
   return 0; // La valeur renvoyée ne représente rien !
 }
 
-void NoeudAffectation::compiler(ostream & out, unsigned int indentation) {
-    std::string indent(indentation * 4 , ' ');
-    m_variable->compiler(out,0);
+void NoeudAffectation::compiler(ostream & out, int indentation) {
+    bool instructionSeule = true;
+    if (indentation < 0) {
+        indentation = 0;
+        instructionSeule = false;
+    }
+
+    m_variable->compiler(out, -1);
     out << "=";
-    m_expression->compiler(out,0);
-    out << ";";
+    m_expression->compiler(out, -1);
+    if (instructionSeule) out << ";";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -85,20 +90,20 @@ int NoeudOperateurBinaire::executer() {
   return valeur; // On retourne la valeur calculée
 }
 
-void NoeudOperateurBinaire::compiler(ostream & out, unsigned int indentation) {
+void NoeudOperateurBinaire::compiler(ostream & out, int indentation) {
     std::string op = m_operateur.getChaine();
 
     out << "(";
     if (op == "non") {
         out << "!";
-        m_operandeGauche->compiler(out, 0);
+        m_operandeGauche->compiler(out, -1);
     } else {
         if (op == "et") op = "&&";
         else if (op == "ou") op = "||";
 
-        m_operandeGauche->compiler(out, 0);
+        m_operandeGauche->compiler(out, -1);
         out << op;
-        m_operandeDroit->compiler(out, 0);
+        m_operandeDroit->compiler(out, -1);
     }
     out << ")";
 }
@@ -119,12 +124,12 @@ int NoeudInstSi::executer() {
     return 0; // La valeur renvoyée ne représente rien !
 }
 
-void NoeudInstSi::compiler(ostream & out, unsigned int indentation) {
+void NoeudInstSi::compiler(ostream & out, int indentation) {
     std::string indent(indentation * 4, ' ');
     if (m_condition != nullptr) {
         if (!m_isPremiereCondition) { out << ' '; }
         out << "if (";
-        m_condition->compiler(out, 0);
+        m_condition->compiler(out, -1);
         out << ")";
     }
 
@@ -168,12 +173,12 @@ int NoeudInstRepeter::executer(){
     return 0;
 }
 
-void NoeudInstRepeter::compiler(ostream & out, unsigned int indentation) {
+void NoeudInstRepeter::compiler(ostream & out, int indentation) {
     std::string indent(indentation * 4, ' ');
     out << "do {" << endl;
     m_sequence->compiler(out, indentation + 1);
     out << indent << "} while (!(";
-    m_condition->compiler(out, 0);
+    m_condition->compiler(out, -1);
     out << "));" << endl;
 }
 
@@ -194,14 +199,14 @@ int NoeudInstPour::executer() {
     return 0;
 }
 
-void NoeudInstPour::compiler(ostream & out, unsigned int indentation) {
+void NoeudInstPour::compiler(ostream & out, int indentation) {
     std::string indent(4 * indentation, ' ');
     out << "for (";
-    if (m_init != nullptr) m_init->compiler(out, 0);
+    if (m_init != nullptr) m_init->compiler(out, -1);
     out << ";";
-    m_condition->compiler(out, 0);
+    m_condition->compiler(out, -1);
     out << ";";
-    if (m_affectation != nullptr) m_affectation->compiler(out, 0);
+    if (m_affectation != nullptr) m_affectation->compiler(out, -1);
     out << ") {" << endl;
     m_sequence->compiler(out, indentation + 1);
     out << indent << "}" << endl;
@@ -220,7 +225,7 @@ int NoeudInstTantQue::executer() {
     return 0; // La valeur renvoyée ne représente rien !
 }
 
-void NoeudInstTantQue::compiler(ostream & out, unsigned int indentation) {
+void NoeudInstTantQue::compiler(ostream & out, int indentation) {
     std::string indent(indentation * 4, ' ');
     out << "while " ;
     m_condition->compiler(out,indentation);
@@ -253,11 +258,11 @@ int NoeudInstLire::executer() {
     return 0;
 }
 
-void NoeudInstLire::compiler(ostream & out, unsigned int indentation) {
+void NoeudInstLire::compiler(ostream & out, int indentation) {
     out << "std::cin";
     for (Noeud* var : m_variables) {
         out << " >> ";
-        var->compiler(out, indentation);
+        var->compiler(out, -1);
     }
 
     out << ";";
@@ -290,14 +295,14 @@ int NoeudInstEcrire::executer() {
     return 0; // La valeur renvoyée ne représente rien !
 }
 
-void NoeudInstEcrire::compiler(ostream & out, unsigned int indentation) {
+void NoeudInstEcrire::compiler(ostream & out, int indentation) {
     out << "std::cout";
     for (Noeud* inst : m_ecritures) {
         out << " << ";
         if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
             out << ((SymboleValue*) inst)->getChaine();
         } else {
-            inst->compiler(out, 0);
+            inst->compiler(out, -1);
         }
     }
     out << ";";
