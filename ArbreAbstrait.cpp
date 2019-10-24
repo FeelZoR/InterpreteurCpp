@@ -20,7 +20,11 @@ int NoeudSeqInst::executer() {
 
 
 void NoeudSeqInst::compiler(ostream & out, unsigned int indentation) {
-    
+    for (unsigned int i = 0; i < m_instructions.size(); i++) {
+        cout << std::string(indentation * 4, ' ');
+        m_instructions[i]->compiler(out, indentation);
+        cout << endl;
+    }
 }
 
 void NoeudSeqInst::ajoute(Noeud* instruction) {
