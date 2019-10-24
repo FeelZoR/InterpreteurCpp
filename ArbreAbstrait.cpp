@@ -42,7 +42,11 @@ int NoeudAffectation::executer() {
 }
 
 void NoeudAffectation::compiler(ostream & out, unsigned int indentation) {
-
+    std::string indent(indentation * 4 , ' ');
+    m_variable->compiler(out,0);
+    out << "=";
+    m_expression->compiler(out,0);
+    out << ";" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +82,21 @@ int NoeudOperateurBinaire::executer() {
 }
 
 void NoeudOperateurBinaire::compiler(ostream & out, unsigned int indentation) {
+    std::string op = m_operateur.getChaine();
 
+    out << "(";
+    if (op == "non") {
+        out << "!";
+        m_operandeGauche->compiler(out, 0);
+    } else {
+        if (op == "et") op = "&&";
+        else if (op == "ou") op = "||";
+
+        m_operandeGauche->compiler(out, 0);
+        out << op;
+        m_operandeDroit->compiler(out, 0);
+    }
+    out << ")";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
