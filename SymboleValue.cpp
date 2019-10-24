@@ -21,7 +21,7 @@ int SymboleValue::executer() {
 }
 
 void SymboleValue::compiler(ostream & out, unsigned int indentation) {
-    out << std::to_string(m_valeur);
+    out << getChaine();
 }
 
 ostream & operator<<(ostream & cout, const SymboleValue & symbole) {
