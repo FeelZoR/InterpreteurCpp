@@ -82,7 +82,21 @@ int NoeudOperateurBinaire::executer() {
 }
 
 void NoeudOperateurBinaire::compiler(ostream & out, unsigned int indentation) {
+    std::string op = m_operateur.getChaine();
 
+    out << "(";
+    if (op == "non") {
+        out << "!";
+        m_operandeGauche->compiler(out, 0);
+    } else {
+        if (op == "et") op = "&&";
+        else if (op == "ou") op = "||";
+
+        m_operandeGauche->compiler(out, 0);
+        out << op;
+        m_operandeDroit->compiler(out, 0);
+    }
+    out << ")";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
