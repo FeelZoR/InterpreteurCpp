@@ -160,7 +160,12 @@ int NoeudInstRepeter::executer(){
 }
 
 void NoeudInstRepeter::compiler(ostream & out, unsigned int indentation) {
-
+    std::string indent(indentation * 4, ' ');
+    out << indent << "do {" << endl;
+    m_sequence->compiler(out, indentation + 1);
+    out << indent << "} while (!(";
+    m_condition->compiler(out, 0);
+    out << "));" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -263,5 +268,14 @@ int NoeudInstEcrire::executer() {
 }
 
 void NoeudInstEcrire::compiler(ostream & out, unsigned int indentation) {
-
+    out << std::string(indentation * 4, ' ') << "std::cout ";
+    for (Noeud* inst : m_ecritures) {
+        out << "<< ";
+        if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
+            out << ((SymboleValue*) inst)->getChaine();
+        } else {
+            inst->compiler(out, 0);
+        }
+    }
+    out << ";" << endl;
 }
