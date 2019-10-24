@@ -50,7 +50,7 @@ void NoeudAffectation::compiler(ostream & out, unsigned int indentation) {
     m_variable->compiler(out,0);
     out << "=";
     m_expression->compiler(out,0);
-    out << ";" << endl;
+    out << ";";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -122,8 +122,7 @@ int NoeudInstSi::executer() {
 void NoeudInstSi::compiler(ostream & out, unsigned int indentation) {
     std::string indent(indentation * 4, ' ');
     if (m_condition != nullptr) {
-        if (m_isPremiereCondition) { out << indent; }
-        else { out << ' '; }
+        if (!m_isPremiereCondition) { out << ' '; }
         out << "if (";
         m_condition->compiler(out, 0);
         out << ")";
@@ -131,11 +130,13 @@ void NoeudInstSi::compiler(ostream & out, unsigned int indentation) {
 
     out << " {" << endl;
     m_sequence->compiler(out, indentation + 1);
-    out << indent << "}" << endl;
+    out << indent << "}";
 
     if (m_prochaineCondition != nullptr) {
-        out << indent << "else";
+        out << " else";
         m_prochaineCondition->compiler(out, indentation);
+    } else {
+        out << endl;
     }
 }
 
@@ -169,7 +170,7 @@ int NoeudInstRepeter::executer(){
 
 void NoeudInstRepeter::compiler(ostream & out, unsigned int indentation) {
     std::string indent(indentation * 4, ' ');
-    out << indent << "do {" << endl;
+    out << "do {" << endl;
     m_sequence->compiler(out, indentation + 1);
     out << indent << "} while (!(";
     m_condition->compiler(out, 0);
@@ -195,7 +196,7 @@ int NoeudInstPour::executer() {
 
 void NoeudInstPour::compiler(ostream & out, unsigned int indentation) {
     std::string indent(4 * indentation, ' ');
-    out << indent << "for (";
+    out << "for (";
     if (m_init != nullptr) m_init->compiler(out, 0);
     out << ";";
     m_condition->compiler(out, 0);
@@ -221,11 +222,11 @@ int NoeudInstTantQue::executer() {
 
 void NoeudInstTantQue::compiler(ostream & out, unsigned int indentation) {
     std::string indent(indentation * 4, ' ');
-    out << indent << "while " ;
+    out << "while " ;
     m_condition->compiler(out,indentation);
-    out << "{" << endl;
+    out << " {" << endl;
     m_sequence->compiler(out,indentation+1);
-    out << "}";
+    out << indent << "}" << endl;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -253,13 +254,13 @@ int NoeudInstLire::executer() {
 }
 
 void NoeudInstLire::compiler(ostream & out, unsigned int indentation) {
-    out << std::string(4 * indentation, ' ') << "std::cin";
+    out << "std::cin";
     for (Noeud* var : m_variables) {
         out << " >> ";
         var->compiler(out, indentation);
     }
 
-    out << ";" << endl;
+    out << ";";
 }
 
 void NoeudInstLire::ajoute(Noeud* var){
@@ -290,14 +291,14 @@ int NoeudInstEcrire::executer() {
 }
 
 void NoeudInstEcrire::compiler(ostream & out, unsigned int indentation) {
-    out << std::string(indentation * 4, ' ') << "std::cout ";
+    out << "std::cout";
     for (Noeud* inst : m_ecritures) {
-        out << "<< ";
+        out << " << ";
         if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
             out << ((SymboleValue*) inst)->getChaine();
         } else {
             inst->compiler(out, 0);
         }
     }
-    out << ";" << endl;
+    out << ";";
 }
