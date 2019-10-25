@@ -36,7 +36,11 @@ int main(int argc, char* argv[]) {
         Interpreteur interpreteur(fichier);
         interpreteur.analyse();
         // Si pas d'exception levée, l'analyse syntaxique a réussi
+        if(interpreteur.getArbre() != nullptr){
         cout << endl << "================ Syntaxe Correcte" << endl;
+        } else {
+        cout << endl << "================ Syntaxe Incorrecte" << endl;    
+        }
         if (compile) {
             compiler(*out, interpreteur.getTable(), interpreteur.getArbre());
         } else {
