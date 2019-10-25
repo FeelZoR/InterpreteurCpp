@@ -1,0 +1,28 @@
+# Test de Si
+# Résultat attendu :
+# i = 6
+# j = 3
+procedure principale()
+    i = 5;
+    si (i < 3)
+        i = 3;
+    sinon # Rentre ici
+        i = 6;
+    finsi
+
+    # i = 6
+    j = 9;
+    si (j > 10)
+        j = -1;
+    sinonsi ((j == 9) et (i == 6)) # Rentre ici
+        j = -2;
+    sinon
+        i = -5;
+    finsi
+
+    # i = 6 | j = -2
+    si (j < 0)
+        j = 3;
+    finsi
+
+finproc
