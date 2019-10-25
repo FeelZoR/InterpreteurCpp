@@ -1,4 +1,5 @@
 #include "Interpreteur.h"
+#include "Instruction.h"
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
@@ -53,15 +54,25 @@ Noeud* Interpreteur::programme() {
 
 Noeud* Interpreteur::seqInst() {
   // <seqInst> ::= <inst> { <inst> }
+    Instruction* instructions = new Instruction();
   NoeudSeqInst* sequence = new NoeudSeqInst();
+ 
   do {
-    sequence->ajoute(inst());
-  } while (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "si" || m_lecteur.getSymbole() == "pour" || m_lecteur.getSymbole() == "tantque" || m_lecteur.getSymbole() == "repeter" || m_lecteur.getSymbole() == "ecrire" || m_lecteur.getSymbole() == "lire");
-
+       try{
+           sequence->ajoute(inst());
+           }catch (SyntaxeException e){
+            cout << e.what() << endl;
+                while(!instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" ){
+                    m_arbre = nullptr;
+                    m_lecteur.avancer();
+                }
+            }
+    } while (instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc");
   // Tant que le symbole courant est un début possible d'instruction...
   // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
   return sequence;
 }
+  
 
 Noeud* Interpreteur::inst() {
   // <inst> ::= <affectation>  ; | <instSi>
