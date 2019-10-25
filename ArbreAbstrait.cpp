@@ -117,7 +117,7 @@ NoeudInstSi::NoeudInstSi(Noeud* condition, Noeud* sequence)
 }
 
 int NoeudInstSi::executer() {
-    if (m_condition != nullptr && m_condition->executer()) m_sequence->executer();
+    if (m_condition == nullptr || m_condition->executer()) m_sequence->executer();
     else if (m_prochaineCondition != nullptr) {
         m_prochaineCondition->executer();
     }
