@@ -105,7 +105,14 @@ Noeud* Interpreteur::affectation() {
 
 Noeud* Interpreteur::expression() {
   // <expression> ::= <facteur> { <opBinaire> <facteur> }
-  //  <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
+  //  <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou   
+  //////////////////////////////////////////////////////////////////////// 
+  // <expression> ::= <expEt> { ou <expEt> } 
+  // <expEt>    ::= <expComp> { et <expComp> }
+  // <expComp>  ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
+  // <expAdd>   ::= <expMult> { + | - <expMult> }
+  // <expMult>  ::= <facteur> { * | / <facteur> }
+  // <facteur>  ::= <entier> | <variable> | - <facteur> | non <facteur> | ( <expression> ) 
   Noeud* fact = facteur();
   while ( m_lecteur.getSymbole() == "+"  || m_lecteur.getSymbole() == "-"  ||
           m_lecteur.getSymbole() == "*"  || m_lecteur.getSymbole() == "/"  ||
@@ -118,7 +125,37 @@ Noeud* Interpreteur::expression() {
     Noeud* factDroit = facteur(); // On mémorise l'opérande droit
     fact = new NoeudOperateurBinaire(operateur, fact, factDroit); // Et on construuit un noeud opérateur binaire
   }
+  
+  Noeud* expComp = NoeudOperateurBinaire();
+  
   return fact; // On renvoie fact qui pointe sur la racine de l'expression
+}
+
+Noeud* Interpreteur::expEt(){
+    
+    
+    return NoeudOperateurBinaire("et",expComp(),expComp());
+}
+
+
+Noeud* Interpreteur::expComp(){
+    
+}
+
+Noeud* Interpreteur::expAdd(){
+    
+    
+}
+// Je sais pas // MDR 
+Noeud* Interpreteur::expMult(){
+    Noeud* facteurg = facteur();
+    while ( m_lecteur.getSymbole() == "/" || m_lecteur.getSymbole() == "*" ) {
+      Symbole operateur = m_lecteur.getSymbole();
+      m_lecteur.avancer();
+      Noeud* facteurd = facteur();
+    }
+    
+    return new NoeudOperateurBinaire(operateur,facteurg,facteurd);
 }
 
 Noeud* Interpreteur::facteur() {

@@ -40,7 +40,7 @@ procedure principale()
       j=-12;
     finsi
 
-    lire (var1,var2);
+    lire (var1,var2)
 
 finproc
 # Commentaire Final

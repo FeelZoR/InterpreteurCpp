@@ -42,6 +42,13 @@ private:
     Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
 
+    
+    Noeud* expMult();      //  <expression> ::= <expEt> { ou <expEt> }
+    Noeud* expEt();        //       <expEt> ::= <expComp> { et <expComp> }
+    Noeud* expComp();      //     <expComp> ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
+    Noeud* expAdd();       //      <expAdd> ::= <expMult> { + | - <expMult> }
+    Noeud* expMult();      //     <expMult> ::= <facteur> { * | / <facteur> }
+    
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception
     void testerEtAvancer(const string & symboleAttendu); // Si symbole courant != symboleAttendu, on lève une exception, sinon on avance
