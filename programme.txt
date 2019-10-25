@@ -1,12 +1,11 @@
 # Fichier de test
 # Les lignes de commentaires commencent par #
 procedure principale()
-    j = 0;
-   repeter
-        j= j + 1;
-    jusqua (j>9)
-    j = 1 + 1
-    i = 12+3
+    i = 0;
+    repeter
+        i = i + 1;
+    jusqua (i>9)
+    i = 12+3;
     si (i>14)
         j=1;
     finsi
@@ -18,7 +17,7 @@ procedure principale()
     ecrire("Canard", 25, " ", 3);
 
     pour (d = 0 ; d < 10 ; d = d + 1)
-      j = j + 1
+      j = j + 1;
     finpour
 
     tantque (i>5)
