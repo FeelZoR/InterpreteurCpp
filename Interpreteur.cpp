@@ -65,8 +65,8 @@ Noeud* Interpreteur::seqInst() {
             sequence->ajoute(inst());
         } catch (SyntaxeException e) {
             cerr << e.what() << endl;
+            m_erreur = true;
             while (!instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "EOF") {
-                m_erreur = true;
                 m_lecteur.avancer();
             }
         }
