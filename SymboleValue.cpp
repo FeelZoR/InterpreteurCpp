@@ -20,8 +20,8 @@ int SymboleValue::executer() {
   return m_valeur;
 }
 
-void SymboleValue::compiler(ostream & out, unsigned int indentation) {
-    out << std::to_string(m_valeur);
+void SymboleValue::compiler(ostream & out, int indentation) {
+    out << getChaine();
 }
 
 ostream & operator<<(ostream & cout, const SymboleValue & symbole) {
