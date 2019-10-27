@@ -5,11 +5,14 @@
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
-m_lecteur(fichier), m_table(), m_arbre(nullptr) {
+m_lecteur(fichier), m_table(), m_arbre(nullptr),m_erreur(false) {
 }
 
 void Interpreteur::analyse() {
   m_arbre = programme(); // on lance l'analyse de la première règle
+  if(m_erreur){
+      m_arbre = nullptr; // Si on a trouvé une erreur de syntaxe on vide l'arbre
+  }
 }
 
 void Interpreteur::tester(const string & symboleAttendu) const {
@@ -62,8 +65,8 @@ Noeud* Interpreteur::seqInst() {
             sequence->ajoute(inst());
         } catch (SyntaxeException e) {
             cerr << e.what() << endl;
+            m_erreur = true;
             while (!instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "EOF") {
-                m_arbre = nullptr;
                 m_lecteur.avancer();
             }
         }
