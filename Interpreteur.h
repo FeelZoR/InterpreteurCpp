@@ -31,7 +31,11 @@ private:
     Noeud*  seqInst();	   //     <seqInst> ::= <inst> { <inst> }
     Noeud*  inst();	   //        <inst> ::= <affectation> ; | <instSi>
     Noeud*  affectation(); // <affectation> ::= <variable> = <expression> 
-   // Noeud*  expression();  //  <expression> ::= <facteur> { <opBinaire> <facteur> }
+    Noeud*  expression();  //  <expression> ::= <expEt> { ou <expEt> }
+    Noeud*  expEt();       //       <expEt> ::= <expComp> { et <expComp> }
+    Noeud*  expComp();     //     <expComp> ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
+    Noeud*  expAdd();      //      <expAdd> ::= <expMult> { + | - <expMult> }
+    Noeud*  expMult();     //     <expMult> ::= <facteur> { * | / <facteur> }
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi (<expression>) <seqInst> } [ sinon <seqInst> ] finsi
@@ -42,13 +46,6 @@ private:
     Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
 
-    
-    Noeud* expression();  //  <expression> ::= <expEt> { ou <expEt> }
-    Noeud* expEt();        //       <expEt> ::= <expComp> { et <expComp> }
-    Noeud* expComp();      //     <expComp> ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
-    Noeud* expAdd();       //      <expAdd> ::= <expMult> { + | - <expMult> }
-    Noeud* expMult();      //     <expMult> ::= <facteur> { * | / <facteur> }
-    
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception
     void testerEtAvancer(const string & symboleAttendu); // Si symbole courant != symboleAttendu, on lève une exception, sinon on avance

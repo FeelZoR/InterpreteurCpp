@@ -104,15 +104,7 @@ Noeud* Interpreteur::affectation() {
 }
 
 Noeud* Interpreteur::expression() {
-  // <expression> ::= <facteur> { <opBinaire> <facteur> }
-  //  <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou   
-  //////////////////////////////////////////////////////////////////////// 
   // <expression> ::= <expEt> { ou <expEt> } 
-  // <expEt>    ::= <expComp> { et <expComp> }
-  // <expComp>  ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
-  // <expAdd>   ::= <expMult> { + | - <expMult> }
-  // <expMult>  ::= <facteur> { * | / <facteur> }
-  // <facteur>  ::= <entier> | <variable> | - <facteur> | non <facteur> | ( <expression> ) 
     Noeud* exprOu = expEt();
     while ( m_lecteur.getSymbole() == "ou" ) {
       Symbole operateur = m_lecteur.getSymbole();
@@ -124,6 +116,7 @@ Noeud* Interpreteur::expression() {
 }
 
 Noeud* Interpreteur::expEt(){
+  // <expEt>    ::= <expComp> { et <expComp> }
     Noeud* exprEt = expComp();
     while ( m_lecteur.getSymbole() == "et" ) {
       Symbole operateur = m_lecteur.getSymbole();
@@ -135,6 +128,7 @@ Noeud* Interpreteur::expEt(){
 }
 
 Noeud* Interpreteur::expComp(){
+  // <expComp>  ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
      Noeud* exprComp = expAdd();
   
     while ( m_lecteur.getSymbole() == "==" || m_lecteur.getSymbole() == "!=" || m_lecteur.getSymbole() == "<" || m_lecteur.getSymbole() == "<=" ||m_lecteur.getSymbole() == ">" ||m_lecteur.getSymbole() == ">=" ) {
@@ -147,6 +141,7 @@ Noeud* Interpreteur::expComp(){
 }
 
 Noeud* Interpreteur::expAdd(){
+  // <expAdd>   ::= <expMult> { + | - <expMult> }
     Noeud* exprAdd = expMult();
   
     while ( m_lecteur.getSymbole() == "+" || m_lecteur.getSymbole() == "-" ) {
@@ -159,7 +154,8 @@ Noeud* Interpreteur::expAdd(){
     return exprAdd; 
 }
 
-Noeud* Interpreteur::expMult(){    
+Noeud* Interpreteur::expMult(){
+  // <expMult>  ::= <facteur> { * | / <facteur> }
     Noeud* exprMult = facteur();
   
     while ( m_lecteur.getSymbole() == "/" || m_lecteur.getSymbole() == "*" ) {
