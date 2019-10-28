@@ -1,4 +1,4 @@
-# Test de tant que
+# Test de répéter
 # Résultat attendu :
 # i = 10
 procedure principale()
