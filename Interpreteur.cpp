@@ -5,11 +5,14 @@
 using namespace std;
 
 Interpreteur::Interpreteur(ifstream & fichier) :
-m_lecteur(fichier), m_table(), m_arbre(nullptr) {
+m_lecteur(fichier), m_table(), m_arbre(nullptr),m_erreur(false) {
 }
 
 void Interpreteur::analyse() {
   m_arbre = programme(); // on lance l'analyse de la première règle
+  if(m_erreur){
+      m_arbre = nullptr; // Si on a trouvé une erreur de syntaxe on vide l'arbre
+  }
 }
 
 void Interpreteur::tester(const string & symboleAttendu) const {
@@ -62,8 +65,8 @@ Noeud* Interpreteur::seqInst() {
             sequence->ajoute(inst());
         } catch (SyntaxeException e) {
             cerr << e.what() << endl;
+            m_erreur = true;
             while (!instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "EOF") {
-                m_arbre = nullptr;
                 m_lecteur.avancer();
             }
         }
@@ -115,21 +118,67 @@ Noeud* Interpreteur::affectation() {
 }
 
 Noeud* Interpreteur::expression() {
-  // <expression> ::= <facteur> { <opBinaire> <facteur> }
-  //  <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
-  Noeud* fact = facteur();
-  while ( m_lecteur.getSymbole() == "+"  || m_lecteur.getSymbole() == "-"  ||
-          m_lecteur.getSymbole() == "*"  || m_lecteur.getSymbole() == "/"  ||
-          m_lecteur.getSymbole() == "<"  || m_lecteur.getSymbole() == "<=" ||
-          m_lecteur.getSymbole() == ">"  || m_lecteur.getSymbole() == ">=" ||
-          m_lecteur.getSymbole() == "==" || m_lecteur.getSymbole() == "!=" ||
-          m_lecteur.getSymbole() == "et" || m_lecteur.getSymbole() == "ou"   ) {
-    Symbole operateur = m_lecteur.getSymbole(); // On mémorise le symbole de l'opérateur
-    m_lecteur.avancer();
-    Noeud* factDroit = facteur(); // On mémorise l'opérande droit
-    fact = new NoeudOperateurBinaire(operateur, fact, factDroit); // Et on construuit un noeud opérateur binaire
-  }
-  return fact; // On renvoie fact qui pointe sur la racine de l'expression
+  // <expression> ::= <expEt> { ou <expEt> } 
+    Noeud* exprOu = expEt();
+    while ( m_lecteur.getSymbole() == "ou" ) {
+      Symbole operateur = m_lecteur.getSymbole();
+      m_lecteur.avancer();
+      Noeud* facteurd = expEt(); 
+      exprOu = new NoeudOperateurBinaire(operateur, exprOu, facteurd);
+    }
+    return exprOu; 
+}
+
+Noeud* Interpreteur::expEt(){
+  // <expEt>    ::= <expComp> { et <expComp> }
+    Noeud* exprEt = expComp();
+    while ( m_lecteur.getSymbole() == "et" ) {
+      Symbole operateur = m_lecteur.getSymbole();
+      m_lecteur.avancer();
+      Noeud* facteurd = expComp(); 
+      exprEt = new NoeudOperateurBinaire(operateur, exprEt, facteurd);
+    }
+    return exprEt; 
+}
+
+Noeud* Interpreteur::expComp(){
+  // <expComp>  ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
+     Noeud* exprComp = expAdd();
+  
+    while ( m_lecteur.getSymbole() == "==" || m_lecteur.getSymbole() == "!=" || m_lecteur.getSymbole() == "<" || m_lecteur.getSymbole() == "<=" ||m_lecteur.getSymbole() == ">" ||m_lecteur.getSymbole() == ">=" ) {
+      Symbole operateur = m_lecteur.getSymbole();
+      m_lecteur.avancer();
+      Noeud* facteurd = expAdd();
+      exprComp = new NoeudOperateurBinaire(operateur, exprComp, facteurd);
+    }
+    return exprComp;    
+}
+
+Noeud* Interpreteur::expAdd(){
+  // <expAdd>   ::= <expMult> { + | - <expMult> }
+    Noeud* exprAdd = expMult();
+  
+    while ( m_lecteur.getSymbole() == "+" || m_lecteur.getSymbole() == "-" ) {
+      Symbole operateur = m_lecteur.getSymbole();
+      m_lecteur.avancer();
+      Noeud* facteurd = expMult();
+      
+      exprAdd = new NoeudOperateurBinaire(operateur, exprAdd, facteurd);
+    }
+    return exprAdd; 
+}
+
+Noeud* Interpreteur::expMult(){
+  // <expMult>  ::= <facteur> { * | / <facteur> }
+    Noeud* exprMult = facteur();
+  
+    while ( m_lecteur.getSymbole() == "/" || m_lecteur.getSymbole() == "*" ) {
+      Symbole operateur = m_lecteur.getSymbole();
+      m_lecteur.avancer();
+      Noeud* facteurd = facteur();    
+      exprMult = new NoeudOperateurBinaire(operateur, exprMult, facteurd);
+    }
+    return exprMult;
 }
 
 Noeud* Interpreteur::facteur() {
