@@ -1,0 +1,9 @@
+# Test de lire
+# Résultat attendu :
+# i = 2 * valeur entrée par l'utilisateur
+procedure principale()
+    lire(i);
+    i = i * 2;
+finproc
+
+
