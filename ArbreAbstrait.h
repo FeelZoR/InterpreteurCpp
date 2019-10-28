@@ -171,7 +171,7 @@ public:
     NoeudInstEcrire();
     // Construit une "instruction ecrire" avec sa condition et sa séquence d'instruction
 
-    virtual void ajoute(Noeud* instruction);
+    virtual void ajoute(Noeud* instruction) override;
 
     ~NoeudInstEcrire() {
     } // A cause du destructeur virtuel de la classe Noeud
