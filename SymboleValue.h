@@ -15,7 +15,6 @@ class SymboleValue : public Symbole,  // Un symbole valué est un symbole qui a 
 public:
 	  SymboleValue(const Symbole & s); // Construit un symbole valué à partir d'un symbole existant s
 	  ~SymboleValue( ) {}
-          void compiler(ostream & out, int indentation) override;
           void accepter(Visiteur& visiteur) override;
 	  inline void setValeur(int valeur)    { this->m_valeur=valeur; m_defini=true;  } // accesseur
 	  inline bool estDefini()              { return m_defini;                       } // accesseur

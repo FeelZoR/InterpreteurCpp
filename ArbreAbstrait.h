@@ -19,7 +19,6 @@ class Noeud {
 // Classe abstraite dont dériveront toutes les classes servant à représenter l'arbre abstrait
 // Remarque : la classe ne contient aucun constructeur
   public:
-    virtual void compiler(ostream & out, int indentation) =0 ;
     virtual void accepter(Visiteur& visiteur) = 0;
     virtual void ajoute(Noeud* instruction) { throw OperationInterditeException(); }
     virtual ~Noeud() {} // Présence d'un destructeur virtuel conseillée dans les classes abstraites
@@ -32,7 +31,6 @@ class NoeudSeqInst : public Noeud {
   public:
      NoeudSeqInst();         // Construit une séquence d'instruction vide
     ~NoeudSeqInst() {}       // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
     void ajoute(Noeud* instruction) override;  // Ajoute une instruction à la séquence
     inline vector<Noeud *> getInstructions() const { return m_instructions; }
@@ -48,7 +46,6 @@ class NoeudAffectation : public Noeud {
   public:
      NoeudAffectation(Noeud* variable, Noeud* expression); // construit une affectation
     ~NoeudAffectation() {}   // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
 
     inline Noeud* getVariable() const { return m_variable; }
@@ -67,7 +64,6 @@ class NoeudOperateurBinaire : public Noeud {
     NoeudOperateurBinaire(Symbole operateur, Noeud* operandeGauche, Noeud* operandeDroit);
     // Construit une opération binaire : operandeGauche operateur OperandeDroit
    ~NoeudOperateurBinaire() {} // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
 
     inline Symbole getOperateur() const { return m_operateur; }
@@ -87,7 +83,6 @@ class NoeudInstSi : public Noeud {
     NoeudInstSi(Noeud* condition, Noeud* sequence);
      // Construit une "instruction si" avec sa condition et sa séquence d'instruction
    ~NoeudInstSi() {}         // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
 
     void ajoute(Noeud* condition) override;
@@ -96,7 +91,7 @@ class NoeudInstSi : public Noeud {
     inline Noeud* getCondition() const { return m_condition; }
     inline Noeud* getSequence() const { return m_sequence; }
     inline Noeud* getProchaineCondition() const { return m_prochaineCondition; }
-    inline bool   getisPremiereCondition() const { return m_isPremiereCondition; }
+    inline bool   isPremiereCondition() const { return m_isPremiereCondition; }
 
   private:
     Noeud*  m_condition;
@@ -112,7 +107,6 @@ public :
     NoeudInstRepeter(Noeud* instruction, Noeud* condition);
 
     ~NoeudInstRepeter() {}
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
 
     inline Noeud* getCondition() const { return m_condition; }
@@ -132,7 +126,6 @@ public:
 
     ~NoeudInstPour() {
     } // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
 
     inline Noeud* getInit() const { return m_init; }
@@ -157,7 +150,6 @@ public:
 
     ~NoeudInstTantQue() {
     } // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
 
     inline Noeud* getCondition() const { return m_condition; }
@@ -178,7 +170,6 @@ public:
         
     }
     
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
     void ajoute(Noeud* var) override;
 
@@ -195,12 +186,11 @@ class NoeudInstEcrire : public Noeud {
 public:
     NoeudInstEcrire();
     // Construit une "instruction ecrire" avec sa condition et sa séquence d'instruction
-    virtual void ajoute(Noeud* instruction);
 
     ~NoeudInstEcrire() {
     } // A cause du destructeur virtuel de la classe Noeud
-    void compiler(ostream & out, int indentation) override;
     void accepter(Visiteur& visiteur) override;
+    virtual void ajoute(Noeud* instruction);
 
     inline vector<Noeud*> getEcritures() const { return m_ecritures; }
 

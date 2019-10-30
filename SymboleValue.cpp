@@ -16,10 +16,6 @@ Symbole(s.getChaine()) {
   }
 }
 
-void SymboleValue::compiler(ostream & out, int indentation) {
-    out << getChaine();
-}
-
 void SymboleValue::accepter(Visiteur& visiteur) {
     visiteur.visiterSymboleValue(this);
 }

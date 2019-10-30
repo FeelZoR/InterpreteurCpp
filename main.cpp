@@ -4,6 +4,7 @@ using namespace std;
 #include "Interpreteur.h"
 #include "Exceptions.h"
 #include "VisiteurExecuter.h"
+#include "VisiteurCompiler.h"
 
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre);
 
@@ -77,6 +78,7 @@ void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre) {
             out << indentationBasique << "int " << s.getChaine() << ";" << endl;
         }
     }
-    arbre->compiler(out, 1);
+    VisiteurCompiler visiteur(out, 1);
+    arbre->accepter(visiteur);
     out << "}" << endl;
 }
