@@ -1,5 +1,6 @@
 #include "SymboleValue.h"
 #include "Exceptions.h"
+#include "Visiteur.h"
 #include <stdlib.h>
 
 SymboleValue::SymboleValue(const Symbole & s) :
@@ -15,13 +16,8 @@ Symbole(s.getChaine()) {
   }
 }
 
-int SymboleValue::executer() {
-  if (!m_defini) throw IndefiniException(); // on lève une exception si valeur non définie
-  return m_valeur;
-}
-
-void SymboleValue::compiler(ostream & out, int indentation) {
-    out << getChaine();
+void SymboleValue::accepter(Visiteur& visiteur) {
+    visiteur.visiterSymboleValue(this);
 }
 
 ostream & operator<<(ostream & cout, const SymboleValue & symbole) {
