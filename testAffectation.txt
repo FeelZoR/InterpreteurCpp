@@ -1,0 +1,10 @@
+# Test d'une affectation
+# Résultat attendu :
+# i = 6
+# j = 3
+procedure principale()
+    i = 6;
+    j = i / 2;
+finproc
+
+

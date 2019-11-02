@@ -1,0 +1,11 @@
+# Test de tant que
+# Résultat attendu :
+# j = 128
+procedure principale()
+    j = 1;
+    tantque (j <= 64)
+        j = j * 2;
+    fintantque
+
+finproc
+

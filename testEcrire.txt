@@ -1,0 +1,10 @@
+# Test de ecrire
+# Résultat attendu :
+# i = 1
+# Exécution : "Un poisson a 0 plume"
+procedure principale()
+    i = 1;
+    ecrire("Un poisson a ", i - 1, " plume");
+finproc
+
+

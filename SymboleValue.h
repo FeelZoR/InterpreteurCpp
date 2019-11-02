@@ -17,6 +17,7 @@ public:
 	  ~SymboleValue( ) {}
           void accepter(Visiteur& visiteur) override;
 	  inline void setValeur(int valeur)    { this->m_valeur=valeur; m_defini=true;  } // accesseur
+          inline int  getValeur() const        { return this->m_valeur;                 } // accesseur
 	  inline bool estDefini()              { return m_defini;                       } // accesseur
 	  inline int  getValeur()              { return m_valeur;                       } // accesseur
 

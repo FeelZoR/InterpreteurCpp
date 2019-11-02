@@ -1,0 +1,26 @@
+# Test d'une expression
+# Résultat attendu :
+# i = 6
+# j = 2
+# k = 5
+# l = 2
+# m = 3
+procedure principale()
+    i = 6;
+    j = 2;
+    k = 5;
+    l = 9;
+    m = 19;
+    si (i == 6 et j <= k ou j == 3)
+        l = 2;
+    finsi
+
+    # priorité des opérateurs, le et avant le ou
+    # i == 1 est faux donc (i == 1 et j <= k) est faux
+    # j == 2 est vrai donc (j == 2 ou faux) est vrai
+    si (j == 2 ou i == 1 et j <= k) 
+        m = 3;
+    finsi
+finproc
+
+
