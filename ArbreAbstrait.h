@@ -190,7 +190,7 @@ public:
     ~NoeudInstEcrire() {
     } // A cause du destructeur virtuel de la classe Noeud
     void accepter(Visiteur& visiteur) override;
-    virtual void ajoute(Noeud* instruction);
+    virtual void ajoute(Noeud* instruction) override;
 
     inline vector<Noeud*> getEcritures() const { return m_ecritures; }
 

@@ -15,6 +15,7 @@
 #include "../Interpreteur.h"
 #include "../TableSymboles.h"
 #include "../Exceptions.h"
+#include "../VisiteurExecuter.h"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestInstPour);
 
@@ -38,7 +39,8 @@ void TestInstPour::testPour() {
     
     Interpreteur interpreteur(fichier);
     interpreteur.analyse();
-    interpreteur.getArbre()->executer();
+    VisiteurExecuter visiteur;
+    interpreteur.getArbre()->accepter(visiteur);
     
     const TableSymboles& table = interpreteur.getTable();
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Test valeur i", 11, table[3].getValeur());
