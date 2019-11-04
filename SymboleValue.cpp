@@ -4,13 +4,15 @@
 #include <stdlib.h>
 #include "ValeurEntiere.h"
 #include "ValeurReelle.h"
+#include "ValeurChaine.h"
 
 SymboleValue::SymboleValue(const Symbole & s) :
 Symbole(s.getChaine()) {
   if (s == "<ENTIER>") {
     setValeur(atoi(s.getChaine().c_str())); // c_str convertit une string en char*
   } else if (s == "<CHAINE>") {
-      setValeur(-1);
+      this->m_valeur = new ValeurChaine(s.getChaine().substr(1, s.getChaine().size() - 2));
+      m_defini = true;
   } else if (s == "<REEL>") {
       this->m_valeur = new ValeurReelle(stof(s.getChaine()));
       m_defini = true;

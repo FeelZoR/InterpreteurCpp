@@ -97,14 +97,9 @@ void VisiteurExecuter::visiterNoeudInstLire(NoeudInstLire* noeud) {
 
 void VisiteurExecuter::visiterNoeudInstEcrire(NoeudInstEcrire* noeud) {
     for (Noeud* inst : noeud->getEcritures()) {
-        if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
-            string s = ((SymboleValue*) inst)->getChaine();
-            cout << s.substr(1, s.size() - 2); // On retire le premier et le dernier caractère (les ")
-        } else {
-            m_derniereValeur = 0;
-            inst->accepter(*this);
-            cout << m_derniereValeur;
-        }
+        m_derniereValeur = 0;
+        inst->accepter(*this);
+        cout << m_derniereValeur;
     }
 }
 
