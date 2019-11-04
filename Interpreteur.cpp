@@ -218,7 +218,7 @@ Noeud* Interpreteur::expMult(){
 }
 
 Noeud* Interpreteur::facteur() {
-  // <facteur> ::= <entier> | <reel> | <chaine> | <variable> | - <facteur> | non <facteur> | ( <expression> )
+  // <facteur> ::= <entier> | <reel> | <chaine> | <variable> | - <facteur> | non <facteur> | ( <expression> ) | <alea>
   Noeud* fact = nullptr;
   if (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "<ENTIER>" || m_lecteur.getSymbole() == "<REEL>" || m_lecteur.getSymbole() == "<CHAINE>") {
     fact = m_table.chercheAjoute(m_lecteur.getSymbole()); // on ajoute la variable ou l'entier à la table
@@ -235,6 +235,8 @@ Noeud* Interpreteur::facteur() {
     m_lecteur.avancer();
     fact = expression();
     testerEtAvancer(")");
+  } else if (m_lecteur.getSymbole() == "alea") {
+    fact = alea();
   } else
     erreur("Facteur incorrect");
   return fact;
@@ -377,4 +379,16 @@ Noeud* Interpreteur::instAppel() {
     testerEtAvancer(";");
     
     return new NoeudInstAppel(nom, parametres);
+} 
+
+Noeud* Interpreteur::alea() {
+    // <alea> ::= alea(<expression>, <expression>)
+    testerEtAvancer("alea");
+    testerEtAvancer("(");
+    Noeud* min = expression();
+    testerEtAvancer(",");
+    Noeud* max = expression();
+    testerEtAvancer(")");
+    
+    return new NoeudAlea(min, max);
 } 

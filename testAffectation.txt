@@ -13,6 +13,7 @@ procedure principale()
     l = k + j;
     m = j + k;
     n = "Bla" * 2 + "Car";
+    o = alea(3, 100);
 finproc
 
 

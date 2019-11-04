@@ -108,6 +108,14 @@ void VisiteurExecuter::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
     TableProcedures::getTable()->executerProcedure(noeud->getNom(), noeud->getParametres(), *this);
 }
 
+void VisiteurExecuter::visiterNoeudAlea(NoeudAlea* noeud) {
+    noeud->getMin()->accepter(*this);
+    int min = m_derniereValeur->getEntier();
+    noeud->getMax()->accepter(*this);
+    int max = m_derniereValeur->getEntier();
+    m_derniereValeur = new ValeurEntiere(rand() % (max - min) + min);
+}
+
 void VisiteurExecuter::visiterSymboleValue(SymboleValue* symbole) {
     if (!symbole->estDefini()) throw IndefiniException(); // on lève une exception si valeur non définie
     m_derniereValeur = symbole->getValeur();

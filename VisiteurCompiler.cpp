@@ -148,6 +148,14 @@ void VisiteurCompiler::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
     m_out << ")" << endl;
 }
 
+void VisiteurCompiler::visiterNoeudAlea(NoeudAlea* noeud) {
+    m_out << "random.randint(";
+    noeud->getMin()->accepter(*this);
+    m_out << ",";
+    noeud->getMax()->accepter(*this);
+    m_out << ")" << endl;
+}
+
 void VisiteurCompiler::visiterSymboleValue(SymboleValue* symbole) {
     m_out << symbole->getChaine();
 }
