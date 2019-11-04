@@ -44,7 +44,7 @@ void VisiteurExecuter::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud
 void VisiteurExecuter::visiterNoeudInstSi(NoeudInstSi* noeud) {
     if (noeud->getCondition() != nullptr) {
         noeud->getCondition()->accepter(*this);
-        if (m_derniereValeur) {
+        if (m_derniereValeur->isVrai()) {
             noeud->getSequence()->accepter(*this);
         } else if (noeud->getProchaineCondition() != nullptr) {
             noeud->getProchaineCondition()->accepter(*this);
@@ -64,7 +64,7 @@ void VisiteurExecuter::visiterNoeudInstRepeter(NoeudInstRepeter* noeud) {
 void VisiteurExecuter::visiterNoeudInstPour(NoeudInstPour* noeud) {
     if (noeud->getInit() != nullptr) noeud->getInit()->accepter(*this);
     noeud->getCondition()->accepter(*this);
-    while (m_derniereValeur) {
+    while (m_derniereValeur->isVrai()) {
         noeud->getSequence()->accepter(*this);
         if (noeud->getAffectation() != nullptr) noeud->getAffectation()->accepter(*this);
         noeud->getCondition()->accepter(*this);
@@ -73,7 +73,7 @@ void VisiteurExecuter::visiterNoeudInstPour(NoeudInstPour* noeud) {
 
 void VisiteurExecuter::visiterNoeudInstTantQue(NoeudInstTantQue* noeud) {
     noeud->getCondition()->accepter(*this);
-    while (m_derniereValeur) {
+    while (m_derniereValeur->isVrai()) {
         noeud->getSequence()->accepter(*this);
         noeud->getCondition()->accepter(*this);
     }
