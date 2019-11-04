@@ -1,4 +1,5 @@
 #include "VisiteurExecuter.h"
+#include "ValeurEntiere.h"
 
 void VisiteurExecuter::visiterNoeudSeqInst(NoeudSeqInst* noeud) {
     for (unsigned int i = 0; i < noeud->getInstructions().size(); i++)
@@ -11,7 +12,7 @@ void VisiteurExecuter::visiterNoeudAffectation(NoeudAffectation* noeud) {
 }
 
 void VisiteurExecuter::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud) {  
-    int og, od, valeur;
+    Valeur *og, *od, *valeur;
     if (noeud->getOperandeGauche() != nullptr) {
         noeud->getOperandeGauche()->accepter(*this); // On évalue l'opérande gauche
         og = m_derniereValeur;
@@ -21,21 +22,21 @@ void VisiteurExecuter::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud
         od = m_derniereValeur; 
     }
     // Et on combine les deux opérandes en fonctions de l'opérateur
-    if (noeud->getOperateur() == "+") valeur = (og + od);
-    else if (noeud->getOperateur() == "-") valeur = (og - od);
-    else if (noeud->getOperateur() == "*") valeur = (og * od);
-    else if (noeud->getOperateur() == "==") valeur = (og == od);
-    else if (noeud->getOperateur() == "!=") valeur = (og != od);
-    else if (noeud->getOperateur() == "<") valeur = (og < od);
-    else if (noeud->getOperateur() == ">") valeur = (og > od);
-    else if (noeud->getOperateur() == "<=") valeur = (og <= od);
-    else if (noeud->getOperateur() == ">=") valeur = (og >= od);
-    else if (noeud->getOperateur() == "et") valeur = (og && od);
-    else if (noeud->getOperateur() == "ou") valeur = (og || od);
-    else if (noeud->getOperateur() == "non") valeur = (!og);
+    if (noeud->getOperateur() == "+") valeur = (*og + od);
+    else if (noeud->getOperateur() == "-") valeur = (*og - od);
+    else if (noeud->getOperateur() == "*") valeur = (*og * od);
+    else if (noeud->getOperateur() == "==") valeur = new ValeurEntiere(*og == od);
+    else if (noeud->getOperateur() == "!=") valeur = new ValeurEntiere(*og != od);
+    else if (noeud->getOperateur() == "<") valeur = new ValeurEntiere(*og < od);
+    else if (noeud->getOperateur() == ">") valeur = new ValeurEntiere(*og > od);
+    else if (noeud->getOperateur() == "<=") valeur = new ValeurEntiere(*og <= od);
+    else if (noeud->getOperateur() == ">=") valeur = new ValeurEntiere(*og >= od);
+    else if (noeud->getOperateur() == "et") valeur = new ValeurEntiere(*og && od);
+    else if (noeud->getOperateur() == "ou") valeur = new ValeurEntiere(*og || od);
+    else if (noeud->getOperateur() == "non") valeur = new ValeurEntiere(!*og);
     else if (noeud->getOperateur() == "/") {
         if (od == 0) throw DivParZeroException();
-        valeur = og / od;
+        valeur = *og / od;
     }
     m_derniereValeur = valeur;
 }

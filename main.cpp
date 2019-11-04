@@ -6,6 +6,8 @@ using namespace std;
 #include "VisiteurExecuter.h"
 #include "VisiteurCompiler.h"
 
+#include "ValeurEntiere.h"
+
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre);
 
 int main(int argc, char* argv[]) {
