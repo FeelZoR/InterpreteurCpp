@@ -182,9 +182,9 @@ Noeud* Interpreteur::expMult(){
 }
 
 Noeud* Interpreteur::facteur() {
-  // <facteur> ::= <entier> | <variable> | - <facteur> | non <facteur> | ( <expression> )
+  // <facteur> ::= <entier> | <reel> | <variable> | - <facteur> | non <facteur> | ( <expression> )
   Noeud* fact = nullptr;
-  if (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "<ENTIER>") {
+  if (m_lecteur.getSymbole() == "<VARIABLE>" || m_lecteur.getSymbole() == "<ENTIER>" || m_lecteur.getSymbole() == "<REEL>") {
     fact = m_table.chercheAjoute(m_lecteur.getSymbole()); // on ajoute la variable ou l'entier à la table
     m_lecteur.avancer();
   } else if (m_lecteur.getSymbole() == "-") { // - <facteur>
