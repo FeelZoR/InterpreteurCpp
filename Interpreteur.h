@@ -24,10 +24,11 @@ private:
     Lecteur        m_lecteur;  // Le lecteur de symboles utilisé pour analyser le fichier
     TableSymboles  m_table;    // La table des symboles valués
     Noeud*         m_arbre;    // L'arbre abstrait
-    bool           m_erreur;   // Etat de l'intrpreteur
+    bool           m_erreur;   // Etat de l'interpreteur
 
     // Implémentation de la grammaire
-    Noeud*  programme();   //   <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
+    Noeud*  programme();   //   <programme> ::= {procedure <procedure>} procedure principale() <seqInst> finproc FIN_FICHIER
+    void    procedure();   //   <procedure> ::= <variable>([<variable> {, <variable> }]) <seqInst> finproc
 
     Noeud*  seqInst();	   //     <seqInst> ::= <inst> { <inst> }
     Noeud*  inst();	   //        <inst> ::= <affectation> ; | <instSi>
@@ -42,9 +43,10 @@ private:
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi (<expression>) <seqInst> } [ sinon <seqInst> ] finsi
     Noeud*  instPour();    //    <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
-    Noeud*  instLire();    //   <instLire>  ::= lire (variable {, variable});
+    Noeud*  instLire();    //   <instLire>  ::= lire (<variable> {, <variable>});
     Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
+    Noeud*  instAppel();   //       <appel> ::= appel <variable>([<expression> {, <expression>}]);
 
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception

@@ -17,6 +17,7 @@ public:
     void visiterNoeudInstTantQue(NoeudInstTantQue* noeud) override;
     void visiterNoeudInstLire(NoeudInstLire* noeud) override;
     void visiterNoeudInstEcrire(NoeudInstEcrire* noeud) override;
+    void visiterNoeudInstAppel(NoeudInstAppel* noeud) override;
     void visiterSymboleValue(SymboleValue* symbole) override;
     
 private:

@@ -135,3 +135,15 @@ void NoeudInstEcrire::ajoute(Noeud* instruction) {
 void NoeudInstEcrire::accepter(Visiteur& visiteur) {
     visiteur.visiterNoeudInstEcrire(this);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstAppel
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudInstAppel::NoeudInstAppel(Symbole nom, vector<Noeud*> parametres)
+: m_nom(nom), m_parametres(parametres) {
+}
+
+void NoeudInstAppel::accepter(Visiteur& visiteur) {
+    visiteur.visiterNoeudInstAppel(this);
+}

@@ -1,5 +1,6 @@
 #include "VisiteurExecuter.h"
 #include "ValeurEntiere.h"
+#include "TableProcedures.h"
 
 void VisiteurExecuter::visiterNoeudSeqInst(NoeudSeqInst* noeud) {
     for (unsigned int i = 0; i < noeud->getInstructions().size(); i++)
@@ -101,6 +102,10 @@ void VisiteurExecuter::visiterNoeudInstEcrire(NoeudInstEcrire* noeud) {
         inst->accepter(*this);
         cout << m_derniereValeur;
     }
+}
+
+void VisiteurExecuter::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
+    TableProcedures::getTable()->executerProcedure(noeud->getNom(), noeud->getParametres(), *this);
 }
 
 void VisiteurExecuter::visiterSymboleValue(SymboleValue* symbole) {

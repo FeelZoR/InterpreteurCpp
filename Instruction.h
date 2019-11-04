@@ -22,7 +22,7 @@ public:
     Instruction();
     bool isInstruction(Symbole sym);
 private:
-    string m_instructions[7] = {"<VARIABLE>","ecrire","si","pour","tantque","repeter","lire"};
+    string m_instructions[8] = {"<VARIABLE>","ecrire","si","pour","tantque","repeter","lire","appel"};
 
 };
 

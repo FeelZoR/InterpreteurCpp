@@ -139,6 +139,15 @@ void VisiteurCompiler::visiterNoeudInstEcrire(NoeudInstEcrire* noeud) {
     m_out << indent << "print('')" << endl;
 }
 
+void VisiteurCompiler::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
+    m_out << noeud->getNom().getChaine() << "(";
+    for(int i = 0; i < noeud->getParametres().size(); i++) {
+        if (i != 0) { m_out << ", "; }
+        noeud->getParametres()[i]->accepter(*this);
+    }
+    m_out << ")" << endl;
+}
+
 void VisiteurCompiler::visiterSymboleValue(SymboleValue* symbole) {
     m_out << symbole->getChaine();
 }

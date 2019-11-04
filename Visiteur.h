@@ -28,6 +28,7 @@ public:
     virtual void visiterNoeudInstTantQue(NoeudInstTantQue* noeud) = 0;
     virtual void visiterNoeudInstLire(NoeudInstLire* noeud) = 0;
     virtual void visiterNoeudInstEcrire(NoeudInstEcrire* noeud) = 0;
+    virtual void visiterNoeudInstAppel(NoeudInstAppel* noeud) = 0;
     virtual void visiterSymboleValue(SymboleValue* symbole) = 0;
 };
 

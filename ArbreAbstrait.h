@@ -198,4 +198,23 @@ private:
     vector<Noeud*> m_ecritures;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+class NoeudInstAppel : public Noeud {
+    // Classe pour représenter un noeud "instruction appel"
+public:
+    NoeudInstAppel(Symbole nom, vector<Noeud*> parametres);
+    // Construit une "instruction appel" avec sa condition et sa séquence d'instruction
+
+    ~NoeudInstAppel() {
+    } // A cause du destructeur virtuel de la classe Noeud
+    void accepter(Visiteur& visiteur) override;
+
+    inline Symbole        getNom() const { return m_nom; }
+    inline vector<Noeud*> getParametres() const { return m_parametres; }
+
+private:
+    Symbole        m_nom;
+    vector<Noeud*> m_parametres;
+};
+
 #endif /* ARBREABSTRAIT_H */

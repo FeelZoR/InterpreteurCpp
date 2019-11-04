@@ -1,5 +1,6 @@
 #include "Interpreteur.h"
 #include "Instruction.h"
+#include "TableProcedures.h"
 #include <stdlib.h>
 #include <iostream>
 using namespace std;
@@ -44,16 +45,48 @@ void Interpreteur::erreur(const string & message) const {
 }
 
 Noeud* Interpreteur::programme() {
-  // <programme> ::= procedure principale() <seqInst> finproc FIN_FICHIER
-  testerEtAvancer("procedure");
-  testerEtAvancer("principale");
-  testerEtAvancer("(");
-  testerEtAvancer(")");
-  Noeud* sequence = seqInst();
-  testerEtAvancer("finproc");
-  tester("<FINDEFICHIER>");
-  return sequence;
+    // <programme> ::= {procedure <procedure>} procedure principale() <seqInst> finproc FIN_FICHIER
+    Noeud* sequence = nullptr;
+    while (sequence == nullptr) {
+        testerEtAvancer("procedure");
+        if (m_lecteur.getSymbole() == "<VARIABLE>") {
+            procedure();
+        } else {
+            testerEtAvancer("principale");
+            testerEtAvancer("(");
+            testerEtAvancer(")");
+            sequence = seqInst();
+            testerEtAvancer("finproc");
+            tester("<FINDEFICHIER>");
+        }
+    }
+    return sequence;
 }
+
+void Interpreteur::procedure() {
+    // <procedure> ::= <variable>([<variable> {, <variable> }]) <seqInst> finproc
+    TableSymboles table = m_table;
+    m_table = TableSymboles();
+    std::vector<SymboleValue*> parametres;
+    
+    tester("<VARIABLE>");
+    Symbole nom = m_lecteur.getSymbole();
+    m_lecteur.avancer();
+    testerEtAvancer("(");
+    if (m_lecteur.getSymbole() == "<VARIABLE>") {
+        parametres.push_back(m_table.chercheAjoute(m_lecteur.getSymbole()));
+        m_lecteur.avancer();
+        while (m_lecteur.verifierPourAvancer(",")) {
+            tester("<VARIABLE>");
+            parametres.push_back(m_table.chercheAjoute(m_lecteur.getSymbole()));
+        }
+    }
+    testerEtAvancer(")");
+    Noeud* sequence = seqInst();
+    testerEtAvancer("finproc");
+    TableProcedures::getTable()->ajoutProcedure(nom, new Procedure(m_table, sequence, parametres));
+    m_table = table;
+}   
 
 Noeud* Interpreteur::seqInst() {
     // <seqInst> ::= <inst> { <inst> }
@@ -100,6 +133,9 @@ Noeud* Interpreteur::inst() {
   } 
   else if(m_lecteur.getSymbole() == "lire"){
       return instLire();
+  }
+  else if(m_lecteur.getSymbole() == "appel"){
+      return instAppel();
   }
   else {
       erreur("Instruction incorrecte");
@@ -321,3 +357,24 @@ Noeud* Interpreteur::instLire(){
     testerEtAvancer(";");
     return var;
 }
+
+Noeud* Interpreteur::instAppel() {
+    // <appel> ::= appel <variable>([<expression> {, <expression>}]);
+    testerEtAvancer("appel");
+    tester("<VARIABLE>");
+    Symbole nom = m_lecteur.getSymbole();
+    m_lecteur.avancer();
+    testerEtAvancer("(");
+    
+    std::vector<Noeud*> parametres;
+    if (m_lecteur.getSymbole() != ")") {
+        parametres.push_back(expression());
+        while (m_lecteur.verifierPourAvancer(",")) {
+            parametres.push_back(expression());
+        }
+    }
+    testerEtAvancer(")");
+    testerEtAvancer(";");
+    
+    return new NoeudInstAppel(nom, parametres);
+} 
