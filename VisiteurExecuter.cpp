@@ -2,6 +2,10 @@
 #include "ValeurEntiere.h"
 #include "TableProcedures.h"
 
+void VisiteurExecuter::visiterProcedure(Procedure* procedure) {
+    procedure->getSequence()->accepter(*this);
+}
+
 void VisiteurExecuter::visiterNoeudSeqInst(NoeudSeqInst* noeud) {
     for (unsigned int i = 0; i < noeud->getInstructions().size(); i++)
         noeud->getInstructions()[i]->accepter(*this); // on exécute chaque instruction de la séquence

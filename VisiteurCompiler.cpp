@@ -1,7 +1,21 @@
 #include "VisiteurCompiler.h"
+#include "Procedure.h"
 
 VisiteurCompiler::VisiteurCompiler(std::ostream& out, int indentation)
 : m_out(out), m_indentation(indentation) {}
+
+void VisiteurCompiler::visiterProcedure(Procedure* procedure) {
+    m_out << "def " << procedure->getNom() << "(";
+    bool first = true;
+    for (SymboleValue* param : procedure->getParametres()) {
+        if (!first) { m_out << ", "; first = false; }
+        param->accepter(*this);
+    }
+    m_out << "):" << endl;
+    m_indentation++;
+    procedure->getSequence()->accepter(*this);
+    m_indentation--;
+}
 
 void VisiteurCompiler::visiterNoeudSeqInst(NoeudSeqInst* noeud) {
     for (unsigned int i = 0; i < noeud->getInstructions().size(); i++) {

@@ -8,6 +8,7 @@ class VisiteurCompiler : public Visiteur {
 public:
     VisiteurCompiler(std::ostream& out, int indentation);
     
+    void visiterProcedure(Procedure* procedure) override;
     void visiterNoeudSeqInst(NoeudSeqInst* noeud) override;
     void visiterNoeudAffectation(NoeudAffectation* noeud) override;
     void visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud) override;

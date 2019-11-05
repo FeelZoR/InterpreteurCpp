@@ -7,6 +7,7 @@ using namespace std;
 #include "VisiteurCompiler.h"
 
 #include "ValeurEntiere.h"
+#include "TableProcedures.h"
 
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre);
 
@@ -73,5 +74,6 @@ int main(int argc, char* argv[]) {
 
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre) {
     VisiteurCompiler visiteur(out, 0);
+    TableProcedures::getTable()->compilerProcedures(visiteur);
     arbre->accepter(visiteur);
 }

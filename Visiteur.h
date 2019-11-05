@@ -16,9 +16,11 @@
 
 #include "ArbreAbstrait.h"
 #include "SymboleValue.h"
+#include "Procedure.h"
 
 class Visiteur {
 public:
+    virtual void visiterProcedure(Procedure* procedure) = 0;
     virtual void visiterNoeudSeqInst(NoeudSeqInst* noeud) = 0;
     virtual void visiterNoeudAffectation(NoeudAffectation* noeud) = 0;
     virtual void visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud) = 0;
