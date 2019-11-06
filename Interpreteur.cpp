@@ -99,11 +99,11 @@ Noeud* Interpreteur::seqInst() {
         } catch (SyntaxeException e) {
             cerr << e.what() << endl;
             m_erreur = true;
-            while (!instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "EOF") {
+            while (!instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "<FINDEFICHIER>") {
                 m_lecteur.avancer();
             }
         }
-    } while (instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "EOF");
+    } while (instructions->isInstruction(m_lecteur.getSymbole()) && m_lecteur.getSymbole() != "finproc" && m_lecteur.getSymbole() != "<FINDEFICHIER>");
     // Tant que le symbole courant est un début possible d'instruction...
     // Il faut compléter cette condition chaque fois qu'on rajoute une nouvelle instruction
     return sequence;

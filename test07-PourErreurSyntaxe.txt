@@ -5,6 +5,7 @@ procedure principale()
     j = 0;
     pour (i = 1 ; i <= 10 ; i = i + 1)
         j = j + i * i
+        k = 1
     finpour 
 finproc
 
