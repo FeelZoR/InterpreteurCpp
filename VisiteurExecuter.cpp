@@ -63,7 +63,7 @@ void VisiteurExecuter::visiterNoeudInstRepeter(NoeudInstRepeter* noeud) {
     do {
         noeud->getSequence()->accepter(*this); 
         noeud->getCondition()->accepter(*this);
-    } while (!m_derniereValeur);
+    } while (!m_derniereValeur->isVrai());
 }
 
 void VisiteurExecuter::visiterNoeudInstPour(NoeudInstPour* noeud) {
