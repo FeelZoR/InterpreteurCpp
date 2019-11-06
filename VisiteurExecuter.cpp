@@ -1,4 +1,6 @@
 #include "VisiteurExecuter.h"
+#include "ValeurEntiere.h"
+#include "TableProcedures.h"
 
 void VisiteurExecuter::visiterNoeudSeqInst(NoeudSeqInst* noeud) {
     for (unsigned int i = 0; i < noeud->getInstructions().size(); i++)
@@ -11,7 +13,7 @@ void VisiteurExecuter::visiterNoeudAffectation(NoeudAffectation* noeud) {
 }
 
 void VisiteurExecuter::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud) {  
-    int og, od, valeur;
+    Valeur *og, *od, *valeur;
     if (noeud->getOperandeGauche() != nullptr) {
         noeud->getOperandeGauche()->accepter(*this); // On évalue l'opérande gauche
         og = m_derniereValeur;
@@ -21,21 +23,21 @@ void VisiteurExecuter::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud
         od = m_derniereValeur; 
     }
     // Et on combine les deux opérandes en fonctions de l'opérateur
-    if (noeud->getOperateur() == "+") valeur = (og + od);
-    else if (noeud->getOperateur() == "-") valeur = (og - od);
-    else if (noeud->getOperateur() == "*") valeur = (og * od);
-    else if (noeud->getOperateur() == "==") valeur = (og == od);
-    else if (noeud->getOperateur() == "!=") valeur = (og != od);
-    else if (noeud->getOperateur() == "<") valeur = (og < od);
-    else if (noeud->getOperateur() == ">") valeur = (og > od);
-    else if (noeud->getOperateur() == "<=") valeur = (og <= od);
-    else if (noeud->getOperateur() == ">=") valeur = (og >= od);
-    else if (noeud->getOperateur() == "et") valeur = (og && od);
-    else if (noeud->getOperateur() == "ou") valeur = (og || od);
-    else if (noeud->getOperateur() == "non") valeur = (!og);
+    if (noeud->getOperateur() == "+") valeur = (*og + od);
+    else if (noeud->getOperateur() == "-") valeur = (*og - od);
+    else if (noeud->getOperateur() == "*") valeur = (*og * od);
+    else if (noeud->getOperateur() == "==") valeur = new ValeurEntiere(*og == od);
+    else if (noeud->getOperateur() == "!=") valeur = new ValeurEntiere(*og != od);
+    else if (noeud->getOperateur() == "<") valeur = new ValeurEntiere(*og < od);
+    else if (noeud->getOperateur() == ">") valeur = new ValeurEntiere(*og > od);
+    else if (noeud->getOperateur() == "<=") valeur = new ValeurEntiere(*og <= od);
+    else if (noeud->getOperateur() == ">=") valeur = new ValeurEntiere(*og >= od);
+    else if (noeud->getOperateur() == "et") valeur = new ValeurEntiere(*og && od);
+    else if (noeud->getOperateur() == "ou") valeur = new ValeurEntiere(*og || od);
+    else if (noeud->getOperateur() == "non") valeur = new ValeurEntiere(!*og);
     else if (noeud->getOperateur() == "/") {
         if (od == 0) throw DivParZeroException();
-        valeur = og / od;
+        valeur = *og / od;
     }
     m_derniereValeur = valeur;
 }
@@ -43,7 +45,7 @@ void VisiteurExecuter::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud
 void VisiteurExecuter::visiterNoeudInstSi(NoeudInstSi* noeud) {
     if (noeud->getCondition() != nullptr) {
         noeud->getCondition()->accepter(*this);
-        if (m_derniereValeur) {
+        if (m_derniereValeur->isVrai()) {
             noeud->getSequence()->accepter(*this);
         } else if (noeud->getProchaineCondition() != nullptr) {
             noeud->getProchaineCondition()->accepter(*this);
@@ -63,7 +65,7 @@ void VisiteurExecuter::visiterNoeudInstRepeter(NoeudInstRepeter* noeud) {
 void VisiteurExecuter::visiterNoeudInstPour(NoeudInstPour* noeud) {
     if (noeud->getInit() != nullptr) noeud->getInit()->accepter(*this);
     noeud->getCondition()->accepter(*this);
-    while (m_derniereValeur) {
+    while (m_derniereValeur->isVrai()) {
         noeud->getSequence()->accepter(*this);
         if (noeud->getAffectation() != nullptr) noeud->getAffectation()->accepter(*this);
         noeud->getCondition()->accepter(*this);
@@ -72,7 +74,7 @@ void VisiteurExecuter::visiterNoeudInstPour(NoeudInstPour* noeud) {
 
 void VisiteurExecuter::visiterNoeudInstTantQue(NoeudInstTantQue* noeud) {
     noeud->getCondition()->accepter(*this);
-    while (m_derniereValeur) {
+    while (m_derniereValeur->isVrai()) {
         noeud->getSequence()->accepter(*this);
         noeud->getCondition()->accepter(*this);
     }
@@ -96,15 +98,22 @@ void VisiteurExecuter::visiterNoeudInstLire(NoeudInstLire* noeud) {
 
 void VisiteurExecuter::visiterNoeudInstEcrire(NoeudInstEcrire* noeud) {
     for (Noeud* inst : noeud->getEcritures()) {
-        if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
-            string s = ((SymboleValue*) inst)->getChaine();
-            cout << s.substr(1, s.size() - 2); // On retire le premier et le dernier caractère (les ")
-        } else {
-            m_derniereValeur = 0;
-            inst->accepter(*this);
-            cout << m_derniereValeur;
-        }
+        m_derniereValeur = 0;
+        inst->accepter(*this);
+        cout << m_derniereValeur;
     }
+}
+
+void VisiteurExecuter::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
+    TableProcedures::getTable()->executerProcedure(noeud->getNom(), noeud->getParametres(), *this);
+}
+
+void VisiteurExecuter::visiterNoeudAlea(NoeudAlea* noeud) {
+    noeud->getMin()->accepter(*this);
+    int min = m_derniereValeur->getEntier();
+    noeud->getMax()->accepter(*this);
+    int max = m_derniereValeur->getEntier();
+    m_derniereValeur = new ValeurEntiere(rand() % (max - min) + min);
 }
 
 void VisiteurExecuter::visiterSymboleValue(SymboleValue* symbole) {

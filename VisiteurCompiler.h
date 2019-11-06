@@ -1,21 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   VisiteurCompiler.h
- * Author: feelzor
- *
- * Created on October 30, 2019, 3:10 PM
- */
-
 #ifndef VISITEURCOMPILER_H
 #define VISITEURCOMPILER_H
 
 #include "Visiteur.h"
 
+// Cette classe permet de transpiler le code en Python3
 class VisiteurCompiler : public Visiteur {
 public:
     VisiteurCompiler(std::ostream& out, int indentation);
@@ -29,6 +17,8 @@ public:
     void visiterNoeudInstTantQue(NoeudInstTantQue* noeud) override;
     void visiterNoeudInstLire(NoeudInstLire* noeud) override;
     void visiterNoeudInstEcrire(NoeudInstEcrire* noeud) override;
+    void visiterNoeudInstAppel(NoeudInstAppel* noeud) override;
+    void visiterNoeudAlea(NoeudAlea* noeud) override;
     void visiterSymboleValue(SymboleValue* symbole) override;
     
 private:

@@ -2,6 +2,7 @@
 #define VISITEUREXECUTER_H
 
 #include "Visiteur.h"
+#include "Valeur.h"
 
 class VisiteurExecuter : public Visiteur {
 public:
@@ -14,9 +15,13 @@ public:
     void visiterNoeudInstTantQue(NoeudInstTantQue* noeud) override;
     void visiterNoeudInstLire(NoeudInstLire* noeud) override;
     void visiterNoeudInstEcrire(NoeudInstEcrire* noeud) override;
+    void visiterNoeudInstAppel(NoeudInstAppel* noeud) override;
+    void visiterNoeudAlea(NoeudAlea* noeud) override;
     void visiterSymboleValue(SymboleValue* symbole) override;
+    
+    inline Valeur* getDerniereValeur() { return m_derniereValeur; }
 private:
-    int m_derniereValeur = 0;
+    Valeur* m_derniereValeur;
 };
 
 #endif /* VISITEUREXECUTER_H */

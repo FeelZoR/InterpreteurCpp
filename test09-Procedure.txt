@@ -1,0 +1,9 @@
+# Résultat attendu : 9
+
+procedure carre(a)
+    ecrire(a * a);
+finproc
+
+procedure principale()
+    appel carre(3);
+finproc

@@ -6,9 +6,12 @@ using namespace std;
 #include "VisiteurExecuter.h"
 #include "VisiteurCompiler.h"
 
+#include "ValeurEntiere.h"
+
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre);
 
 int main(int argc, char* argv[]) {
+    srand (time(NULL));
     bool compile = false;
     string nomFich;
     ofstream o;
@@ -42,6 +45,7 @@ int main(int argc, char* argv[]) {
             cout << endl << "================ Syntaxe Correcte" << endl;
         } else {
             cout << endl << "================ Syntaxe Incorrecte" << endl;
+            return 1;
         }
         if (compile) {
             compiler(*out, interpreteur.getTable(), interpreteur.getArbre());
@@ -69,16 +73,7 @@ int main(int argc, char* argv[]) {
 }
 
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre) {
-    std::string indentationBasique(4, ' ');
-    out << "#include <iostream>" << endl << endl;
-    out << "int main() {" << endl;
-    for (int i = 0; i < symboles.getTaille(); i++) {
-        const SymboleValue s = symboles[i];
-        if (s == "<VARIABLE>") {
-            out << indentationBasique << "int " << s.getChaine() << ";" << endl;
-        }
-    }
-    VisiteurCompiler visiteur(out, 1);
+    out << "import random" << endl;
+    VisiteurCompiler visiteur(out, 0);
     arbre->accepter(visiteur);
-    out << "}" << endl;
 }

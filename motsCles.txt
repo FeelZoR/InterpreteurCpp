@@ -33,3 +33,5 @@ ecrire
 et
 ou
 non
+appel
+alea

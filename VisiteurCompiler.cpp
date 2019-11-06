@@ -12,11 +12,6 @@ void VisiteurCompiler::visiterNoeudSeqInst(NoeudSeqInst* noeud) {
 }
 
 void VisiteurCompiler::visiterNoeudAffectation(NoeudAffectation* noeud) {
-    bool instructionSeule = true;
-    if (m_indentation < 0) {
-        instructionSeule = false;
-    }
-
     int indent = m_indentation;
     m_indentation = -1;
     noeud->getVariable()->accepter(*this);
@@ -24,7 +19,6 @@ void VisiteurCompiler::visiterNoeudAffectation(NoeudAffectation* noeud) {
     noeud->getExpression()->accepter(*this);
 
     m_indentation = indent;
-    if (instructionSeule) m_out << ";";
 }
 
 void VisiteurCompiler::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud) {
@@ -34,11 +28,11 @@ void VisiteurCompiler::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud
     
     m_out << "(";
     if (op == "non") {
-        m_out << "!";
+        m_out << "not ";
         noeud->getOperandeGauche()->accepter(*this);
     } else {
-        if (op == "et") op = "&&";
-        else if (op == "ou") op = "||";
+        if (op == "et") op = " and ";
+        else if (op == "ou") op = " or ";
 
         noeud->getOperandeGauche()->accepter(*this);
         m_out << op;
@@ -52,23 +46,22 @@ void VisiteurCompiler::visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud
 void VisiteurCompiler::visiterNoeudInstSi(NoeudInstSi* noeud) {
     std::string indent(m_indentation * 4, ' ');
     if (noeud->getCondition() != nullptr) {
-        if (!noeud->isPremiereCondition()) { m_out << ' '; }
-        m_out << "if (";
+        m_out << "if ";
         int indentOrigine = m_indentation;
         m_indentation = -1;
         noeud->getCondition()->accepter(*this);
         m_indentation = indentOrigine;
-        m_out << ")";
+    } else {
+        m_out << "se";
     }
 
-    m_out << " {" << endl;
+    m_out << ":" << endl;
     m_indentation++;
     noeud->getSequence()->accepter(*this);
     m_indentation--;
-    m_out << indent << "}";
 
     if (noeud->getProchaineCondition() != nullptr) {
-        m_out << " else";
+        m_out << "el";
         noeud->getProchaineCondition()->accepter(*this);
     } else {
         m_out << endl;
@@ -77,73 +70,90 @@ void VisiteurCompiler::visiterNoeudInstSi(NoeudInstSi* noeud) {
 
 void VisiteurCompiler::visiterNoeudInstRepeter(NoeudInstRepeter* noeud) {
     std::string indent(m_indentation * 4, ' ');
-    m_out << "do {" << endl;
-    m_indentation++;
-    noeud->getSequence()->accepter(*this);
-    m_indentation--;
-    m_out << indent << "} while (!(";
+    m_out << indent << "transpilation_dowhile_boolean = 0" << endl;
+    m_out << "while not (";
     int indentOrigine = m_indentation;
     m_indentation = -1;
     noeud->getCondition()->accepter(*this);
     m_indentation = indentOrigine;
-    m_out << "));" << endl;
+    m_out << ") or transpilation_dowhile_boolean == 0:" << endl;
+    m_indentation++;
+    m_out << indent << "    transpilation_dowhile_boolean+=1" << endl;
+    noeud->getSequence()->accepter(*this);
+    m_indentation--;
 }
 
 void VisiteurCompiler::visiterNoeudInstPour(NoeudInstPour* noeud) {
     std::string indent(4 * m_indentation, ' ');
     int indentOrigine = m_indentation;
-    m_indentation = -1;
-    m_out << "for (";
+    
     if (noeud->getInit() != nullptr) noeud->getInit()->accepter(*this);
-    m_out << ";";
+    m_out << endl;
+    m_indentation = -1;
+    m_out << "while";
     noeud->getCondition()->accepter(*this);
-    m_out << ";";
-    if (noeud->getAffectation() != nullptr) noeud->getAffectation()->accepter(*this);
-    m_out << ") {" << endl;
+    m_out << ":" << endl;
     m_indentation = indentOrigine + 1;
     noeud->getSequence()->accepter(*this);
+    m_out << indent << "    ";
+    if (noeud->getAffectation() != nullptr) noeud->getAffectation()->accepter(*this);
     m_indentation--;
-    m_out << indent << "}" << endl;
 }
 
 void VisiteurCompiler::visiterNoeudInstTantQue(NoeudInstTantQue* noeud) {
     std::string indent(m_indentation * 4, ' ');
     m_out << "while " ;
     noeud->getCondition()->accepter(*this);
-    m_out << " {" << endl;
+    m_out << ":" << endl;
     m_indentation++;
     noeud->getSequence()->accepter(*this);
     m_indentation--;
-    m_out << indent << "}" << endl;
 }
 
 void VisiteurCompiler::visiterNoeudInstLire(NoeudInstLire* noeud) {
-    m_out << "std::cin";
+    std::string indent(m_indentation * 4, ' ');
     for (Noeud* var : noeud->getVariables()) {
-        m_out << " >> ";
-        int indent = m_indentation;
+        m_out << indent;
+        int currIndent = m_indentation;
         m_indentation = -1;
         var->accepter(*this);
-        m_indentation = indent;
+        m_indentation = currIndent;
+        m_out << " = input()" << endl;
     }
-
-    m_out << ";";
 }
 
 void VisiteurCompiler::visiterNoeudInstEcrire(NoeudInstEcrire* noeud) {
-    m_out << "std::cout";
+    std::string indent(m_indentation * 4, ' ');
+    bool first = true;
     for (Noeud* inst : noeud->getEcritures()) {
-        m_out << " << ";
-        if ((typeid (*inst) == typeid (SymboleValue) && *((SymboleValue*) inst) == "<CHAINE>")) {
-            m_out << ((SymboleValue*) inst)->getChaine();
-        } else {
-            int indent = m_indentation;
-            m_indentation = -1;
-            inst->accepter(*this);
-            m_indentation = indent;
-        }
+        if (first) m_out << "print(";
+        else m_out << indent << "print(";
+        
+        int currIndent = m_indentation;
+        m_indentation = -1;
+        inst->accepter(*this);
+        m_indentation = currIndent;
+        m_out << ", end = '')" << endl;
+        first = false;
     }
-    m_out << ";";
+    m_out << indent << "print('')" << endl;
+}
+
+void VisiteurCompiler::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
+    m_out << noeud->getNom().getChaine() << "(";
+    for(int i = 0; i < noeud->getParametres().size(); i++) {
+        if (i != 0) { m_out << ", "; }
+        noeud->getParametres()[i]->accepter(*this);
+    }
+    m_out << ")" << endl;
+}
+
+void VisiteurCompiler::visiterNoeudAlea(NoeudAlea* noeud) {
+    m_out << "random.randint(";
+    noeud->getMin()->accepter(*this);
+    m_out << ",";
+    noeud->getMax()->accepter(*this);
+    m_out << ")" << endl;
 }
 
 void VisiteurCompiler::visiterSymboleValue(SymboleValue* symbole) {

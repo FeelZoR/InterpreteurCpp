@@ -2,9 +2,18 @@
 # Résultat attendu :
 # i = 6
 # j = 3
+# k = 2.3
+# l = 5.3
+# m = 5
+# n = BlaBlaCar
 procedure principale()
     i = 6;
     j = i / 2;
+    k = 2.3;
+    l = k + j;
+    m = j + k;
+    n = "Bla" * 2 + "Car";
+    o = alea(3, 100);
 finproc
 
 
