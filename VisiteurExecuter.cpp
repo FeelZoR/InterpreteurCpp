@@ -106,6 +106,7 @@ void VisiteurExecuter::visiterNoeudInstEcrire(NoeudInstEcrire* noeud) {
         inst->accepter(*this);
         cout << m_derniereValeur;
     }
+    cout << endl;
 }
 
 void VisiteurExecuter::visiterNoeudInstAppel(NoeudInstAppel* noeud) {
