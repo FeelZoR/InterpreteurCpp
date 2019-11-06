@@ -12,6 +12,7 @@ using namespace std;
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre);
 
 int main(int argc, char* argv[]) {
+    srand (time(NULL));
     bool compile = false;
     string nomFich;
     ofstream o;
@@ -73,6 +74,7 @@ int main(int argc, char* argv[]) {
 }
 
 void compiler(ostream& out, const TableSymboles& symboles, Noeud* arbre) {
+    out << "import random" << endl;
     VisiteurCompiler visiteur(out, 0);
     TableProcedures::getTable()->compilerProcedures(visiteur);
     arbre->accepter(visiteur);

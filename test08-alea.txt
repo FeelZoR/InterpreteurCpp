@@ -1,0 +1,6 @@
+# Résultat attendu :
+# i : Nombre entre 1 et 100
+
+procedure principale()
+    i = alea(1, 100);
+finproc

@@ -38,7 +38,7 @@ private:
     Noeud*  expComp();     //     <expComp> ::= <expAdd> { == | != | < | <= | > | >= <expAdd> }
     Noeud*  expAdd();      //      <expAdd> ::= <expMult> { + | - <expMult> }
     Noeud*  expMult();     //     <expMult> ::= <facteur> { * | / <facteur> }
-    Noeud*  facteur();     //     <facteur> ::= <entier>  |  <reel>  |  <chaine>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> )
+    Noeud*  facteur();     //     <facteur> ::= <entier>  |  <reel>  |  <chaine>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> ) | <alea>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi (<expression>) <seqInst> } [ sinon <seqInst> ] finsi
     Noeud*  instPour();    //    <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
@@ -47,6 +47,7 @@ private:
     Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
     Noeud*  instRepeter(); // <instRepeter> ::= repeter <seqInst> jusqua ( <expression> )
     Noeud*  instAppel();   //       <appel> ::= appel <variable>([<expression> {, <expression>}]);
+    Noeud*  alea();        //        <alea> ::= alea(<expression>, <expression>)
 
     // outils pour simplifier l'analyse syntaxique
     void tester (const string & symboleAttendu) const;   // Si symbole courant != symboleAttendu, on lève une exception

@@ -1,0 +1,18 @@
+procedure principale()
+    ecrire("Entrez le minimum et le maximum : ");
+    lire(min, max);
+    nbMyst = alea(min, max);
+    nbDevin = nbMyst - 1;
+    nbCoups = 0;
+    tantque (nbDevin != nbMyst)
+        lire(nbDevin);
+        nbCoups = nbCoups + 1;
+        si (nbMyst > nbDevin)
+            ecrire("C'est plus");
+        sinonsi (nbMyst < nbDevin)
+            ecrire("C'est moins");
+        finsi
+    fintantque
+
+    ecrire("Bravo, vous avez trouvé en ", nbCoups, " coup(s)");
+finproc

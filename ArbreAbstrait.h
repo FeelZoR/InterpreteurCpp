@@ -203,7 +203,7 @@ class NoeudInstAppel : public Noeud {
     // Classe pour représenter un noeud "instruction appel"
 public:
     NoeudInstAppel(Symbole nom, vector<Noeud*> parametres);
-    // Construit une "instruction appel" avec sa condition et sa séquence d'instruction
+    // Construit une "instruction appel" avec son nom et ses paramètres
 
     ~NoeudInstAppel() {
     } // A cause du destructeur virtuel de la classe Noeud
@@ -217,4 +217,22 @@ private:
     vector<Noeud*> m_parametres;
 };
 
+////////////////////////////////////////////////////////////////////////////////
+class NoeudAlea : public Noeud {
+    // Classe pour représenter un noeud "alea"
+public:
+    NoeudAlea(Noeud* min, Noeud* max);
+    // Construit un "alea" avec son min et son max
+
+    ~NoeudAlea() {
+    } // A cause du destructeur virtuel de la classe Noeud
+    void accepter(Visiteur& visiteur) override;
+
+    inline Noeud* getMin() const { return m_min; }
+    inline Noeud* getMax() const { return m_max; }
+
+private:
+    Noeud* m_min;
+    Noeud* m_max;
+};
 #endif /* ARBREABSTRAIT_H */

@@ -147,3 +147,13 @@ NoeudInstAppel::NoeudInstAppel(Symbole nom, vector<Noeud*> parametres)
 void NoeudInstAppel::accepter(Visiteur& visiteur) {
     visiteur.visiterNoeudInstAppel(this);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// NoeudInstAlea
+////////////////////////////////////////////////////////////////////////////////
+
+NoeudAlea::NoeudAlea(Noeud* min, Noeud* max) : m_min(min), m_max(max) {}
+
+void NoeudAlea::accepter(Visiteur& visiteur) {
+    visiteur.visiterNoeudAlea(this);
+}

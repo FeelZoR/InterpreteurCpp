@@ -17,6 +17,7 @@ public:
     void visiterNoeudInstLire(NoeudInstLire* noeud) override;
     void visiterNoeudInstEcrire(NoeudInstEcrire* noeud) override;
     void visiterNoeudInstAppel(NoeudInstAppel* noeud) override;
+    void visiterNoeudAlea(NoeudAlea* noeud) override;
     void visiterSymboleValue(SymboleValue* symbole) override;
     
     inline Valeur* getDerniereValeur() { return m_derniereValeur; }
