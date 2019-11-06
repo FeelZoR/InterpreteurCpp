@@ -377,4 +377,4 @@ Noeud* Interpreteur::instAppel() {
     testerEtAvancer(";");
     
     return new NoeudInstAppel(nom, parametres);
-} 
+}

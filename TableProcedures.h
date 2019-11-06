@@ -24,4 +24,3 @@ private:
 };
 
 #endif /* TABLEPROCEDURES_H */
-
