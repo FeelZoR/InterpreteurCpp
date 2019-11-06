@@ -75,6 +75,7 @@ void VisiteurCompiler::visiterNoeudInstSi(NoeudInstSi* noeud) {
     m_indentation--;
 
     if (noeud->getProchaineCondition() != nullptr) {
+        m_out << indent;
         m_out << "el";
         noeud->getProchaineCondition()->accepter(*this);
     } else {
@@ -126,8 +127,12 @@ void VisiteurCompiler::visiterNoeudInstTantQue(NoeudInstTantQue* noeud) {
 
 void VisiteurCompiler::visiterNoeudInstLire(NoeudInstLire* noeud) {
     std::string indent(m_indentation * 4, ' ');
+    bool first = true;
     for (Noeud* var : noeud->getVariables()) {
-        m_out << indent;
+        if(!first)
+            m_out << indent; 
+         else
+             first = false;
         int currIndent = m_indentation;
         m_indentation = -1;
         var->accepter(*this);
