@@ -7,12 +7,14 @@
 #include "Symbole.h"
 #include "Procedure.h"
 #include "VisiteurExecuter.h"
+#include "VisiteurCompiler.h"
 
 class TableProcedures {
 public:
     static TableProcedures* getTable();
     void ajoutProcedure(Symbole nom, Procedure* procedure);
     void executerProcedure(Symbole nom, std::vector<Noeud*> parametres, VisiteurExecuter& v);
+    void compilerProcedures(VisiteurCompiler& v);
 private:
     TableProcedures();
     static TableProcedures* table;
@@ -22,4 +24,3 @@ private:
 };
 
 #endif /* TABLEPROCEDURES_H */
-

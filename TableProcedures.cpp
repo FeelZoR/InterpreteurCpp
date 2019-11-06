@@ -16,8 +16,9 @@ TableProcedures* TableProcedures::getTable() {
 
 void TableProcedures::ajoutProcedure(Symbole nom, Procedure* procedure) {
     std::string nomProcedure(nom.getChaine());
+    m_noms.push_back(nomProcedure);
     m_procedures.push_back(procedure);
-    m_noms.push_back(nom.getChaine());
+    procedure->setNom(nomProcedure);
 }
 
 void TableProcedures::executerProcedure(Symbole nom, std::vector<Noeud*> parametres, VisiteurExecuter& v) {
@@ -30,4 +31,11 @@ void TableProcedures::executerProcedure(Symbole nom, std::vector<Noeud*> paramet
     }
     p->empiler(params);
     p->accepter(v);
+}
+
+void TableProcedures::compilerProcedures(VisiteurCompiler& v) {
+    for (int i = 0; i < m_procedures.size(); i++) {
+        Procedure* procedure = m_procedures[i];
+        procedure->accepter(v);
+    }
 }

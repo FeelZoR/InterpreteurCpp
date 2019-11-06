@@ -6,6 +6,7 @@
 
 class VisiteurExecuter : public Visiteur {
 public:
+    void visiterProcedure(Procedure* procedure) override;
     void visiterNoeudSeqInst(NoeudSeqInst* noeud) override;
     void visiterNoeudAffectation(NoeudAffectation* noeud) override;
     void visiterNoeudOperateurBinaire(NoeudOperateurBinaire* noeud) override;

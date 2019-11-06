@@ -1,10 +1,11 @@
 #include "Procedure.h"
+#include "Visiteur.h"
 
 Procedure::Procedure(TableSymboles table, Noeud* sequence, std::vector<SymboleValue*> parametres) 
 : m_table(table), m_sequence(sequence), m_params(parametres) {}
 
 void Procedure::accepter(Visiteur& visiteur) {
-    m_sequence->accepter(visiteur);
+    visiteur.visiterProcedure(this);
 }
 
 void Procedure::empiler(std::vector<Valeur*> parametres) {

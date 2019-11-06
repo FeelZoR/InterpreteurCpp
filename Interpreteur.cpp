@@ -391,4 +391,4 @@ Noeud* Interpreteur::alea() {
     testerEtAvancer(")");
     
     return new NoeudAlea(min, max);
-} 
+}
