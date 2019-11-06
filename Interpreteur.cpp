@@ -5,9 +5,8 @@
 #include <iostream>
 using namespace std;
 
-Interpreteur::Interpreteur(ifstream & fichier) :
-m_lecteur(fichier), m_table(), m_arbre(nullptr),m_erreur(false) {
-}
+Interpreteur::Interpreteur(ifstream & fichier)
+: m_lecteur(fichier), m_table(), m_arbre(nullptr),m_erreur(false), m_nbErreur(0) {}
 
 void Interpreteur::analyse() {
   m_arbre = programme(); // on lance l'analyse de la première règle
@@ -30,8 +29,19 @@ void Interpreteur::tester(const string & symboleAttendu) const {
 
 void Interpreteur::testerEtAvancer(const string & symboleAttendu) {
   // Teste si le symbole courant est égal au symboleAttendu... Si oui, avance, Sinon, lève une exception
-  tester(symboleAttendu);
-  m_lecteur.avancer();
+    try {
+        tester(symboleAttendu);
+        m_lecteur.avancer();
+        m_nbErreur = 0;
+    } catch (SyntaxeException& e) {
+        m_erreur = true;
+        m_nbErreur++;
+        if (m_nbErreur >= 3) {
+            throw e; // Si le grain fin échoue, on repasse au gros grain
+        } else {
+            cerr << e.what() << endl;
+        }
+    }
 }
 
 void Interpreteur::erreur(const string & message) const {
