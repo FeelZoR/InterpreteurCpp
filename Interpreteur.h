@@ -41,7 +41,7 @@ private:
     Noeud*  facteur();     //     <facteur> ::= <entier>  |  <reel>  |  <chaine>  |  <variable>  |  - <facteur>  | non <facteur> | ( <expression> ) | <alea>
                            //   <opBinaire> ::= + | - | *  | / | < | > | <= | >= | == | != | et | ou
     Noeud*  instSi();      //      <instSi> ::= si ( <expression> ) <seqInst> { sinonsi (<expression>) <seqInst> } [ sinon <seqInst> ] finsi
-    Noeud*  instPour();    //    <instPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
+    Noeud*  instPour();    //    <insPour> ::= pour ( [ <affectation> ] ; <expression> ; [ <affection> ]) <seqInst> finpour
     Noeud*  instTantQue(); // <instTantQue> ::= tantque ( <expression> ) <seqInst> fintantque
     Noeud*  instLire();    //   <instLire>  ::= lire (<variable> {, <variable>});
     Noeud*  instEcrire();  //  <instEcrire> ::= ecrire ( <expression> | <chaine> {, <expression> | <chaine> } );
